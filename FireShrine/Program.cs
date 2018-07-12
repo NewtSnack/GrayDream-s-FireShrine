@@ -154,6 +154,7 @@ namespace FireShrine
     {
         static int chooseAmount; //amount of Options asked to player
         static int theChoice = 0;
+        public static int inspectmenuvar = 0;
         public static int ChoiceSelection(string choice1, string choice2, string choice3, string choice4, string choice5) //The Method That presents Choices to the player and returns a selection as a 
         {
             while (theChoice == 0)
@@ -235,7 +236,7 @@ namespace FireShrine
         }
         public static void InspectItem(int inspect)
         {
-            while (inspect <= 6 & inspect > 0) //may change this to if
+            if (inspect <= 6 & inspect > 0) //may change this to if
             {
                 //check inventory is not empty before call AND if item index exists
 
@@ -276,11 +277,9 @@ namespace FireShrine
                             Character.currentHealth = Character.currentHealth + healthheal;
                             Character.currentHunger = Character.currentHunger + hungerheal;
                             Character.currentThirst = Character.currentThirst + thirstheal;
-
+                            Program.BeliDrop(1);
                         }
                     }
-                    break;
-
 
                 }
                 else
@@ -321,7 +320,7 @@ namespace FireShrine
                         //must choose number 0 - 6 or (D)rop, Us(E) add more to while for more inv space
 
                         while (keypress != ConsoleKey.D0 & keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress
-                            != ConsoleKey.D3 & keypress != ConsoleKey.D4 & keypress != ConsoleKey.D5 & keypress != ConsoleKey.D6 & keypress != ConsoleKey.D & keypress != ConsoleKey.E)
+                            != ConsoleKey.D3 & keypress != ConsoleKey.D4 & keypress != ConsoleKey.D5 & keypress != ConsoleKey.D6 & keypress != ConsoleKey.D)
                         {
                             keypress = Console.ReadKey(true).Key;
                         }
@@ -362,11 +361,6 @@ namespace FireShrine
                                 }
                             }
                             break;
-                        }
-                        //Use E
-                        if (keypress == ConsoleKey.E)
-                        {
-
                         }
                         //CANCEL
                         if (keypress == ConsoleKey.D0)
@@ -459,12 +453,13 @@ namespace FireShrine
         public static void BeliDrop(int item)
         {
             //this should be called in the MenuSelection menu
-            var currentcolor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("{0} Dropped from inventory", Character.Inventory[item][0]);
-            Console.ForegroundColor = currentcolor;
-
+            Story.ColorChanger(ConsoleColor.Blue, $"{Character.Inventory[item][0]} Dropped from inventory");
             //later can implement a system to have the dropped item exist in game world.
+            Character.Inventory.RemoveAt(item);
+        }
+        public static void BeliUse(int item)
+        {
+            Story.ColorChanger(ConsoleColor.Blue, $"{Character.Inventory[item][0]} used.");
             Character.Inventory.RemoveAt(item);
         }
         public static void StatusTimeTicker(int tick)
@@ -487,10 +482,6 @@ namespace FireShrine
                 }
             }
             return null;
-        }
-        public static void Battle()
-        {
-
         }
 
     }
