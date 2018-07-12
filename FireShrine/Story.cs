@@ -6,22 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 namespace FireShrine
-{
-    #region Templates
-    //template for Selection in and Result Out
-    //switch (Selection)
-    //{
-    //    case 1:
-    //        break;
-    //    case 2:
-    //        break;
-    //    case 3:
-    //        break;
-    //    default:
-    //        break;
-    //}
-    #endregion
-
+{    
     class Story
     {
         static bool storysent = false;
@@ -39,29 +24,7 @@ namespace FireShrine
                 Console.WriteLine("...");
             }
         }
-        //public static string Scribe(string longtext)
-        //{
-        //    string returnMessage = "";
-        //    double j = Math.Floor(longtext.Length / 120.0);
-        //    for (int i = 0; i <= j; i++)
-        //    {
-        //        if (i == 0)
-        //        {
-        //            returnMessage = returnMessage + longtext.Substring(0, 120 );
-        //        }
-        //        else if (i == j)
-        //        {
-        //            returnMessage = returnMessage + longtext.Substring((120 * i), longtext.Length % 120);
-        //        }
-        //        else
-        //        {
-        //            returnMessage = returnMessage + longtext.Substring((120 * i), 120);
-        //        }
-
-        //    }
-        //    return returnMessage;
-
-        //}
+        
         public static void JumpToStory()
         {
             if (Chapter == "01")
@@ -259,8 +222,8 @@ namespace FireShrine
 
                 }
                 Continue(0);
-                Console.WriteLine("The bodies are motionless but more importantly is the way they are dressed. " +
-                    "Kevlar body armor, tactical helmets, and broken devices that mean nothing to you. A hexagonal " +
+                Console.WriteLine("The bodies are motionless but what is more unsettling is the way they are dressed. " +
+                    "Kevlar body armor, tactical helmets, and various broken devices. A hexagonal " +
                     "symbol with the name “C.C.” are on each of their uniforms but you don’t recognize the division or outfit. ");
             }
             else
