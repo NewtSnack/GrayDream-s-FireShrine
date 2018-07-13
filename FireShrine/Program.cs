@@ -154,7 +154,6 @@ namespace FireShrine
     {
         static int chooseAmount; //amount of Options asked to player
         static int theChoice = 0;
-        public static int inspectmenuvar = 0;
         public static int ChoiceSelection(string choice1, string choice2, string choice3, string choice4, string choice5) //The Method That presents Choices to the player and returns a selection as a 
         {
             while (theChoice == 0)
@@ -267,6 +266,7 @@ namespace FireShrine
                     //show ammo if gun
                     if (Character.Inventory[inspect - 1][3].Contains("Edible") | Character.Inventory[inspect - 1][3].Contains("Drink"))
                     {
+                        Console.WriteLine();
                         Console.WriteLine("Press E to Use item");
                         if (Console.ReadKey(true).Key == ConsoleKey.E)
                         {
@@ -278,7 +278,11 @@ namespace FireShrine
                             Character.currentHunger = Character.currentHunger + hungerheal;
                             Character.currentThirst = Character.currentThirst + thirstheal;
                             Program.BeliDrop(1);
-                        }
+                        }                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("You have no usable items in your inventory.");
                     }
 
                 }
@@ -311,8 +315,7 @@ namespace FireShrine
                             i++;
                             Console.WriteLine($"{i}: {element[0][0]}");
                         }
-                        Console.WriteLine("      Input the item number for more details...,");
-                        Console.WriteLine("      Press E To Use an Item.");
+                        Console.WriteLine("      Input the item number to inspect/use...,");
                         Console.WriteLine("      Press D To Drop an Item.");
                         Console.WriteLine("      Press 0 To Leave Menus");
 
@@ -483,6 +486,5 @@ namespace FireShrine
             }
             return null;
         }
-
     }
 }

@@ -35,6 +35,18 @@ namespace FireShrine
             {
                 Story02();
             }
+            if (Chapter == "02a")
+            {
+                Story02a();
+            }
+            if (Chapter == "02b")
+            {
+                Story02b();
+            }
+            if (Chapter == "02c")
+            {
+                Story02c();
+            }
         }
         public static void ColorChanger(ConsoleColor color, string Text)
         {
@@ -180,6 +192,8 @@ namespace FireShrine
         }
         public static void Story02a()
         {
+            Chapter = "02a";
+
             if (storysent == false)
             {
                 Continue(0);
@@ -206,6 +220,8 @@ namespace FireShrine
         }
         public static void Story02b()
         {
+            Chapter = "02b";
+
             if (storysent == false)
             {
                 Continue(0);
@@ -233,6 +249,8 @@ namespace FireShrine
         }
         public static void Story02c()
         {
+            Chapter = "02c";
+
             if (storysent == false)
             {
 
