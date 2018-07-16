@@ -244,12 +244,36 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("The bodies are motionless but what is more unsettling is the way they are dressed. " +
                     "Kevlar body armor, tactical helmets, and various broken devices. A hexagonal " +
-                    "symbol with the name “C.C.” are on each of their uniforms but you don’t recognize the division or outfit. ");
+                    "emblem on the shoulder with the text “C.C.” are on each of their uniforms but you don’t recognize the division or outfit. ");
                 Console.WriteLine("A rucksack lay near one of the soldiers. A dark-haired woman who seemed to have been desperately reaching for something" +
                     " before she perished. Picking up the bag to search its contents you notice to your dismay its lightness. It’s empty. What ever she had been looking for in her last moments is gone.");
-                Console.WriteLine("You decide to keep the backpack for yourself when a sickening sound steals focus toward the floor below.");
-                ColorChanger(ConsoleColor.Blue, "Inventory Capicity increased to 6.");
                 Continue(0);
+                ColorChanger(ConsoleColor.Blue, "Inventory Capacity increased to 6.");
+                Console.WriteLine("You decide to keep the backpack for yourself when a sickening sound steals focus toward the floor below.");
+                Continue(0);
+                Console.Clear();
+                Console.WriteLine("A mix of a horrible clicking and guttural breath hisses nearby as a hulking figure laboriously moves at the far side of the dimly lit foyer." +
+                    " Its lumbered steps are slow and thundering, two beady points of light pierce through the dark.");
+                Continue(0);
+                Console.WriteLine("It lurks about, as if searching. Dread looms over you, but it has not noticed you yet.");
+                Console.WriteLine("A gleam catches your eye near the base of the stairs. A pistol. It must have fallen from of the soldiers. Unfortunately for you, a partially destroyed sun roof above illuminates the center of the vestibule." +
+                    " The creature will certainly see you if you make a break for the weapon. You can also stealthily backtrack up the stairs to figure out how to avoid the creature.");
+                Continue(0);
+                Console.WriteLine();
+                Console.WriteLine("Decide.");
+                storysent = true;
+                int Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
+                switch (Selection)
+                {
+                    case 1:
+                        Console.WriteLine("");
+                        break;
+                    case 2:
+                        Console.WriteLine("");
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
