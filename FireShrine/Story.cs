@@ -16,8 +16,12 @@ namespace FireShrine
         {
             if (speed == 0)
             {
+                var keypress = Console.ReadKey(true).Key;
+                while(keypress != ConsoleKey.Enter)
+                {
+                    keypress = Console.ReadKey(true).Key;
+                }
                 Console.WriteLine("...");
-                Console.ReadKey(true);
             }
             else
             {
@@ -241,6 +245,11 @@ namespace FireShrine
                 Console.WriteLine("The bodies are motionless but what is more unsettling is the way they are dressed. " +
                     "Kevlar body armor, tactical helmets, and various broken devices. A hexagonal " +
                     "symbol with the name “C.C.” are on each of their uniforms but you don’t recognize the division or outfit. ");
+                Console.WriteLine("A rucksack lay near one of the soldiers. A dark-haired woman who seemed to have been desperately reaching for something" +
+                    " before she perished. Picking up the bag to search its contents you notice to your dismay its lightness. It’s empty. What ever she had been looking for in her last moments is gone.");
+                Console.WriteLine("You decide to keep the backpack for yourself when a sickening sound steals focus toward the floor below.");
+                ColorChanger(ConsoleColor.Blue, "Inventory Capicity increased to 6.");
+                Continue(0);
             }
             else
             {

@@ -431,6 +431,8 @@ namespace FireShrine
             Thread.Sleep(2000);
             Console.Clear();
             Story.Story01();
+
+            //try threading
         }
         //custom adding of items to inventory with Name, Description, Damage, Attributes, and Durability
         public static void BeliAdd(string[] itemname, string[] descript, string[] damrange, string[] attrib, string[] dura, string[] ammo)
