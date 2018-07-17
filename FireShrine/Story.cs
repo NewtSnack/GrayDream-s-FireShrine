@@ -68,7 +68,7 @@ namespace FireShrine
                 Console.WriteLine("You wake from a restless slumber in a room unfamiliar to you. The air is dank and you can see spears of light piercing ");
                 Console.WriteLine("through the crumbling marble that were once great walls. The cot beneath you protests as you stir. Searching your");
                 Console.WriteLine("surroundings it appears to be a long forgotten room. Disheveled wooden furnishings and a large matted carpet rests upon");
-                Console.WriteLine("an uneven floor. Dust, webbings and moss have claimed this place. The floor beneath you groans as you find your footing");
+                Console.WriteLine("a wooden floor. Dust, webbings and moss have claimed this place. The floor beneath you groans as you find your footing");
                 Console.WriteLine("and you make your way towards the door that now hangs almost completely off its hinges.");
                 Console.WriteLine("A huge ornate chandelier dangles precariously and somehow beautifully above as you being to wonder how you wound up");
                 Console.WriteLine("here.");
