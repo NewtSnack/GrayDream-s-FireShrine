@@ -19,6 +19,8 @@ namespace FireShrine
         public static string mindFraction = mental.ToString() + "/" + MaxSanity.ToString();
         public static float hpfractionActual = (float)currentHealth / (float)vitality;
         public static List<string[][]> Inventory = new List<string[][]>();
+        public static string equipped = "Fists";
+        public static string[] battleActs = new string[] {"Punch", "Grab" };
 
         //survival stats
         static double maxHunger = 20;
@@ -144,10 +146,41 @@ namespace FireShrine
                 Console.WriteLine("        You shouldnt drink anymore");
             }
             //later put dex, str, ini,
-
+            Story.Continue(0);
         }
 
     }
+    public class BattleActions
+    {
+        public static void MoveList()
+        {
+            foreach (string[][] item in Character.Inventory)
+            {
+                var invslot = Array.IndexOf(item,Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
+                if (Character.equipped != "Fists")
+                {
+                    for (var i = 0; i < Character.Inventory[invslot][3].Count(); i++)
+                    {
+                        var itemAttri = Character.Inventory[invslot][3][i];
+                        {
+                            Character.battleActs = new string[] { "Stab", "Slash" };
+                        }
+                        if (itemAttri == "Ranged Weapon")
+                        {
+                            Character.battleActs = new string[] { "Draw a Bead", "Shoot" };
+                        }
+                        if (itemAttri == "Blunt")
+                        {
+                            Character.battleActs = new string[] { "Smash", "Swing" };
+                        }
+                    }
+                }                
+                
+            }           
+
+        }
+    }
+
     public class Menues
     //ChoiceSelection -> MenuSelection -> InspectItem
 
@@ -217,7 +250,7 @@ namespace FireShrine
                                 break;
                         }
 
-                        Story.Continue(0);
+                        Story.Continue(1);
                         Console.Clear();
                         break;
                         //move jumptostory outside these methods.
@@ -267,8 +300,11 @@ namespace FireShrine
                     if (Character.Inventory[inspect - 1][3].Contains("Edible") | Character.Inventory[inspect - 1][3].Contains("Drink"))
                     {
                         Console.WriteLine();
-                        Console.WriteLine("Press E to Use item");
-                        if (Console.ReadKey(true).Key == ConsoleKey.E)
+                        Console.WriteLine("Press U to Use item");
+                        ConsoleKey keyPress = Console.ReadKey(true).Key;
+
+
+                        if (keyPress == ConsoleKey.U)
                         {
                             int healthheal = Int32.Parse(Character.Inventory[inspect - 1][4][0]); //dura
                             int hungerheal = Int32.Parse(Character.Inventory[inspect - 1][2][0]); //lower dam
@@ -277,13 +313,27 @@ namespace FireShrine
                             Character.currentHealth = Character.currentHealth + healthheal;
                             Character.currentHunger = Character.currentHunger + hungerheal;
                             Character.currentThirst = Character.currentThirst + thirstheal;
-                            Program.BeliDrop(1);
+                            Program.BeliDrop(inspect - 1);
                         }                        
                     }
                     else
                     {
                         Console.WriteLine("You have no usable items in your inventory.");
                     }
+                    if (Character.Inventory[inspect - 1][3].Contains("Melee Weapon") | Character.Inventory[inspect - 1][3].Contains("Ranged Weapon"))
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Press E to Equip item");
+                        ConsoleKey keyPress = Console.ReadKey(true).Key;
+                        if (keyPress == ConsoleKey.E)
+                        {
+                            Character.equipped = Character.Inventory[inspect - 1][0][0];
+                            string Attri = Character.Inventory[inspect - 1][3][0];
+                            Console.WriteLine($"Equipped the {Character.Inventory[inspect - 1][0][0]}" );
+                        }
+
+                    }
+
 
                 }
                 else
@@ -313,6 +363,10 @@ namespace FireShrine
                         foreach (string[][] element in Character.Inventory)
                         {
                             i++;
+                            if (element[0][0] == Character.equipped)
+                            {
+                                Console.Write("(Equipped) ");
+                            }
                             Console.WriteLine($"{i}: {element[0][0]}");
                         }
                         Console.WriteLine("      Input the item number to inspect/use...,");
@@ -395,9 +449,11 @@ namespace FireShrine
     class Program
     {
         static string playerName;
-        public static string[] attrilist = { "Container", "Melee Weapon", "Ranged Weapon", "Can Hold Liquid", "Flammable", "Toxic", "Sharp", "Edible", "Drink", "Cursed" };
+        public static string[] attrilist = { "Container", "Melee Weapon", "Ranged Weapon", "Can Hold Liquid", "Flammable", "Toxic", "Sharp", "Blunt", "Edible", "Drink", "Cursed" };
         public static int maxInventory = 2;
         static int nextSlot = 0;
+        public static bool isInBattle = false;
+
 
 
         static void Main(string[] args)
@@ -411,6 +467,10 @@ namespace FireShrine
         {
             Console.WriteLine($"Declare your name: ");
             playerName = Console.ReadLine();
+            if (playerName == "dev")
+            {
+                DevActions();
+            }
             Console.Clear();
         }
         public static void Title()
@@ -487,6 +547,70 @@ namespace FireShrine
                 }
             }
             return null;
+        }
+        public static void DevActions()
+        {
+            Console.WriteLine("Here be the testing envoirnment");
+            Story.Continue(0);
+            BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
+            BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
+            BeliAdd(new string[] { "God Blade" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
+
+            Entities ManBat = new Entities
+            {
+                Name = "Grotesque Bat"
+            };
+            Random _rand = new Random();//dmgs
+            int modifier = _rand.Next(-3, 3);
+            ManBat.BaseDamage = ManBat.BaseDamage + modifier;
+            isInBattle = true;
+            BattleActions.MoveList();
+            Battle(ManBat);
+        }
+
+        static void Battle(Entities Enemy) //give a entity when calling
+        {
+            Console.WriteLine($"You've engaged in combat with the {Enemy.Name}");
+            while (isInBattle == true)
+            {
+                Console.WriteLine("Kill Or Be Killed.");
+                Random diceroll = new Random();
+
+                //Player Turn
+                var i = 0;
+                foreach (var item in Character.battleActs)
+                {
+                    i++;
+                    Console.WriteLine($"({i}) {item}");
+                }
+                var keypress = Console.ReadKey(true).Key;
+
+                while (keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress
+                            != ConsoleKey.H & keypress != ConsoleKey.I & keypress != ConsoleKey.P & keypress != ConsoleKey.Enter)
+                {
+                    keypress = Console.ReadKey(true).Key;
+                }
+                //HUD.MenuSelection(keypress);
+
+                if (Enemy.HealthPoints < 0)
+                {
+                    isInBattle = false;
+                    Console.WriteLine("You've slain the creature.");
+                }
+                Thread.Sleep(100);
+                //Enemy Turn
+                var EnemyAttack = Enemy.movelist[diceroll.Next(0,2)];
+
+                if (Character.currentHealth < 0)
+                {
+                    isInBattle = false;
+                    Console.WriteLine("You Are Dead.");
+                    Story.Continue(0);
+                    Environment.Exit(1);
+                    //Trigger PlayDeath()
+                }
+            }
+
         }
     }
 }

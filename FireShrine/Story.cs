@@ -72,7 +72,7 @@ namespace FireShrine
                 Console.WriteLine("and you make your way towards the door that now hangs almost completely off its hinges.");
                 Console.WriteLine("A huge ornate chandelier dangles precariously and somehow beautifully above as you being to wonder how you wound up");
                 Console.WriteLine("here.");
-                Console.WriteLine("Press any key to continue");
+                Console.WriteLine("Press Enter to continue");
                 Continue(0);
                 Console.WriteLine("Under the light fixture, there is a long table with various silverware next to various fruit, some neatly placed " +
                     "in bowls and other strewn about, staining the tablecloth and littering the floor. Your eye rests upon a decently sized carving knife " +
@@ -98,7 +98,7 @@ namespace FireShrine
             {
                 case 1:
                     Console.WriteLine("You Picked up the improvised Club");
-                    Program.BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1] }, new string[] { "15" }, null);
+                    Program.BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
                     break;
                 case 2:
                     Console.WriteLine("You Grabbed The Knife From the dinner table");
@@ -107,7 +107,7 @@ namespace FireShrine
 
             }
             //reset the storysent variable at the end of chapter
-            //storysent = false;
+            storysent = false;
             //Continue the Story
 
             Story02();
@@ -165,7 +165,7 @@ namespace FireShrine
                 Console.WriteLine("You try to recall how you ended up here, but it fails you. The only images that flash through your mind do not" +
                     " explain where you are and have no correlation with each other. A train, a door, and a computer or a machine of sorts. A sense " +
                     "of urgency begins to rise within just before a hollow knock echoes through these old walls.");
-                Continue(0);
+                Continue(1);
 
                 Console.WriteLine();
                 Console.WriteLine("What will you do?");
@@ -213,7 +213,7 @@ namespace FireShrine
                 ColorChanger(ConsoleColor.Cyan, "Gain Health and Fullness from eating");
                 Character.currentHealth++;
                 Character.currentHunger++;
-                Program.BeliAdd(new string[] { "Apple" }, new string[] { "It isn't crisp, but it'll do" }, new string[] { "1", "1", }, new string[] { Program.attrilist[7] }, new string[] { "1" }, null);
+                Program.BeliAdd(new string[] { "Apple" }, new string[] { "It isn't crisp, but it'll do" }, new string[] { "1", "1", }, new string[] { Program.attrilist[8] }, new string[] { "1" }, null);
                 //for edible items the dam range corresponds to lower number hunger, upper number thirst, the health restored or removed refers to dura.
                 //Menues.ChoiceSelection("Dev Test", "Dev Test", "Dev Test", null, null);
             }
@@ -249,6 +249,7 @@ namespace FireShrine
                     " before she perished. Picking up the bag to search its contents you notice to your dismay its lightness. It’s empty. What ever she had been looking for in her last moments is gone.");
                 Continue(0);
                 ColorChanger(ConsoleColor.Blue, "Inventory Capacity increased to 6.");
+                Program.maxInventory = 6;
                 Console.WriteLine("You decide to keep the backpack for yourself when a sickening sound steals focus toward the floor below.");
                 Continue(0);
                 Console.Clear();
