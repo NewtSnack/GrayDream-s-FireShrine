@@ -10,6 +10,7 @@ namespace FireShrine
     {
         public static int currentHealth = 8;
         public static double vitality = Math.Round((10 + (strength + 2.00) / 5.00));
+        public static int armor = 3;
         public static int strength = 5;
         public static int dexterity = 5;
         public static int initiative = 3;
@@ -20,7 +21,7 @@ namespace FireShrine
         public static float hpfractionActual = (float)currentHealth / (float)vitality;
         public static List<string[][]> Inventory = new List<string[][]>();
         public static string equipped = "Fists";
-        public static string[] battleActs = new string[] {"Punch", "Grab" };
+        public static string[] battleActs = new string[] {"Punch", "Grab", "Block" };
 
         //survival stats
         static double maxHunger = 20;
@@ -145,6 +146,8 @@ namespace FireShrine
             {
                 Console.WriteLine("        You shouldnt drink anymore");
             }
+            Console.WriteLine("Armor Rating: {0}", armor);
+            Console.WriteLine("Initiative: {0}", initiative);
             //later put dex, str, ini,
             Story.Continue(0);
         }
@@ -152,6 +155,12 @@ namespace FireShrine
     }
     public class BattleActions
     {
+        //BattleAction States
+        public static bool parryState;
+        public static bool isQuick = false;
+        
+
+
         public static void MoveList()
         {
             foreach (string[][] item in Character.Inventory)
@@ -162,8 +171,9 @@ namespace FireShrine
                     for (var i = 0; i < Character.Inventory[invslot][3].Count(); i++)
                     {
                         var itemAttri = Character.Inventory[invslot][3][i];
+                        if (itemAttri == "Sharp")
                         {
-                            Character.battleActs = new string[] { "Stab", "Slash" };
+                            Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
                         }
                         if (itemAttri == "Ranged Weapon")
                         {
@@ -171,13 +181,28 @@ namespace FireShrine
                         }
                         if (itemAttri == "Blunt")
                         {
-                            Character.battleActs = new string[] { "Smash", "Swing" };
+                            Character.battleActs = new string[] { "Smash", "Swing", "Block" };
                         }
                     }
                 }                
                 
             }           
 
+        }
+        public static void Stab()
+        {
+            //Get dmg of equipped weapon for all these actions
+        }
+        public static void Slash()
+        {
+            isQuick = true;
+            Console.WriteLine("You unleash a flurry of quick strikes");
+            Story.Continue(0);
+        }
+        public static void Parry()
+        {
+            parryState = true;
+            //deal dmg if attacked next turn
         }
     }
 
@@ -453,6 +478,8 @@ namespace FireShrine
         public static int maxInventory = 2;
         static int nextSlot = 0;
         public static bool isInBattle = false;
+        public static int turncounter = 0;
+
 
 
 
@@ -558,11 +585,11 @@ namespace FireShrine
 
             Entities ManBat = new Entities
             {
-                Name = "Grotesque Bat"
+                Name = "Grotesque Bat",
+                movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" }
+            
             };
-            Random _rand = new Random();//dmgs
-            int modifier = _rand.Next(-3, 3);
-            ManBat.BaseDamage = ManBat.BaseDamage + modifier;
+
             isInBattle = true;
             BattleActions.MoveList();
             Battle(ManBat);
@@ -571,11 +598,12 @@ namespace FireShrine
         static void Battle(Entities Enemy) //give a entity when calling
         {
             Console.WriteLine($"You've engaged in combat with the {Enemy.Name}");
+            Console.WriteLine("Kill Or Be Killed.");
+
             while (isInBattle == true)
             {
-                Console.WriteLine("Kill Or Be Killed.");
                 Random diceroll = new Random();
-
+                //put in Random battle messages here
                 //Player Turn
                 var i = 0;
                 foreach (var item in Character.battleActs)
@@ -585,12 +613,25 @@ namespace FireShrine
                 }
                 var keypress = Console.ReadKey(true).Key;
 
-                while (keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress
+                while (keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress != ConsoleKey.D3 & keypress
                             != ConsoleKey.H & keypress != ConsoleKey.I & keypress != ConsoleKey.P & keypress != ConsoleKey.Enter)
                 {
                     keypress = Console.ReadKey(true).Key;
                 }
-                //HUD.MenuSelection(keypress);
+                switch (keypress)
+                {
+                    case ConsoleKey.D1:
+                        
+                        break;                        
+                    case ConsoleKey.D2:
+                        break;
+                    default:
+                        HUD.MenuSelection(keypress);
+                        continue;                        
+
+                }
+                               
+
 
                 if (Enemy.HealthPoints < 0)
                 {
@@ -599,7 +640,38 @@ namespace FireShrine
                 }
                 Thread.Sleep(100);
                 //Enemy Turn
-                var EnemyAttack = Enemy.movelist[diceroll.Next(0,2)];
+                var EnemyAttack = Enemy.movelist[diceroll.Next(0, Enemy.movelist.Count())];
+
+                //AttackList
+                if (EnemyAttack == "Bite")
+                {
+                    AttackList.Bite(Enemy);
+                    if (BattleActions.parryState == true)
+                    {
+
+                    }
+                }
+                if (EnemyAttack == "Bulwark")
+                {
+                    int skillcounter1 = turncounter;
+                    AttackList.Bulwark(Enemy);
+                }
+                if (EnemyAttack == "Hunt")
+                {
+                    AttackList.Hunt(Enemy);
+                }
+                if (EnemyAttack == "Overwhelm")
+                {
+                    AttackList.Overwhelm(Enemy);
+                    if (BattleActions.parryState == true)
+                    {
+
+                    }
+                }
+             
+
+
+
 
                 if (Character.currentHealth < 0)
                 {
@@ -610,6 +682,10 @@ namespace FireShrine
                     //Trigger PlayDeath()
                 }
             }
+
+        }
+        public static void AttackToMethod()
+        {
 
         }
     }
