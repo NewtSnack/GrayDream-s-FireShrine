@@ -17,6 +17,7 @@ namespace FireShrine
 
         public bool isFlying = false;
         public bool isDodgeing = false;
+        public bool isBulwarked = false;
     }
     public class AttackList
     {
@@ -24,6 +25,7 @@ namespace FireShrine
         {
             Console.WriteLine($"{Enemy.Name} Uses Bulwark!");
             Story.Continue(0);
+            Enemy.isBulwarked = true;
             Enemy.Defense = Enemy.Defense + 3;
             Console.WriteLine($"{Enemy.Name} increases its defense!");
         }
@@ -35,20 +37,39 @@ namespace FireShrine
             int modifier = _rand.Next(-2, 2);
             var damageDealt = Enemy.BaseDamage + modifier - Character.armor;
             Character.currentHealth = Character.currentHealth - damageDealt;
-            Story.ColorChanger(ConsoleColor.Red, $"Bite Deals {damageDealt} to you.");
+            if (damageDealt != 0)
+            {
+                Story.ColorChanger(ConsoleColor.Red, $"Bite Deals {damageDealt} to you.");
+            }
+            else
+            {
+                Story.ColorChanger(ConsoleColor.Red, $"{Enemy.Name} Missed!");
+            }
         }
-        public static void Hunt(Entities Enemy)
+        public static void Hunt(Entities Enemy) //if enemy uses this you can only hit them if the attack isQuick.
         {
             Console.WriteLine($"{Enemy.Name} Begins the Hunt!");
             Story.Continue(0);
             Enemy.isDodgeing = true;
-            Enemy.DodgeRating = Enemy.DodgeRating + 2;
+            Enemy.DodgeRating = Enemy.DodgeRating + 2; //if going to use dodge stat
             Console.WriteLine($"{Enemy.Name} Becomes faster!");
         }
         public static void Overwhelm(Entities Enemy)
         {
             Console.WriteLine($"{Enemy.Name} jumps back and is preparing to leap..");
             //prep for large damage next turn
+        }
+        public static void RemoveAllEnemyBuffs(Entities Enemy)
+        {
+            Enemy.isDodgeing = false;
+            Enemy.isBulwarked = false;
+        }
+        public static void DeBulwark(Entities Enemy)
+        {
+            Enemy.isBulwarked = false;
+            Enemy.Defense = Enemy.Defense - 3;
+            Console.WriteLine($"{Enemy.Name} has lost bulwark.");
+
         }
     }
 

@@ -155,42 +155,84 @@ namespace FireShrine
     }
     public class BattleActions
     {
-        //BattleAction States
+        //BattleAction States/Buffs
         public static bool parryState;
         public static bool isQuick = false;
-        
+        public static int invslot; // value is set when when MoveList is called. MoveList must be called when switching equipped item.
+
+        static Random diceroll = new Random();
+        static int damvaluelow = Int32.Parse(Character.Inventory[invslot][2][0]);
+        static int damvaluehigh = Int32.Parse(Character.Inventory[invslot][2][1]);
 
 
         public static void MoveList()
         {
-            foreach (string[][] item in Character.Inventory)
+            if (Character.equipped != "Fists")
             {
-                var invslot = Array.IndexOf(item,Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
-                if (Character.equipped != "Fists")
+                var num = Character.Inventory.Count();
+                for (int i = 0; i < Character.Inventory.Count(); i++)
                 {
-                    for (var i = 0; i < Character.Inventory[invslot][3].Count(); i++)
+                    if (Character.Inventory[i][0][0] == Character.equipped)
                     {
-                        var itemAttri = Character.Inventory[invslot][3][i];
-                        if (itemAttri == "Sharp")
+                        for (var k = 0; k < (Character.Inventory[i][3]).Count(); k++)
                         {
-                            Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
-                        }
-                        if (itemAttri == "Ranged Weapon")
-                        {
-                            Character.battleActs = new string[] { "Draw a Bead", "Shoot" };
-                        }
-                        if (itemAttri == "Blunt")
-                        {
-                            Character.battleActs = new string[] { "Smash", "Swing", "Block" };
-                        }
-                    }
-                }                
-                
-            }           
+                            int num2 = Character.Inventory[i][3].Count();
+                            var itemAttri = Character.Inventory[i][3][k];
+                            if (itemAttri == "Sharp")
+                            {
+                                Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
+                                invslot = i;
+                                break;
+                            }
+                            if (itemAttri == "Ranged Weapon")
+                            {
+                                Character.battleActs = new string[] { "Draw a Bead", "Shoot" };
+                                invslot = i;
+                                break;
 
+                            }
+                            if (itemAttri == "Blunt")
+                            {
+                                Character.battleActs = new string[] { "Smash", "Swing", "Block" };
+                                invslot = i;
+                                break;
+                            }
+                        }
+                    }                    
+                }
+            }
+            else
+            {
+                Character.battleActs = new string[] { "Punch", "Grab", "Block" };
+            }
+                
+                
+            
+                //var invslot = Character.Inventory.IndexOf(Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
+        }
+        public static void ActstoActions(string Acts)
+        {
+            switch (Acts)
+            {
+                case "Stab":
+                    Stab();
+                    break;
+                case "Slash":
+                    Slash();
+                    break;
+                case "Parry":
+                    Parry();
+                    break;
+                default:
+                    break;
+            }
         }
         public static void Stab()
         {
+            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            Console.WriteLine($"You rush foward and plunge the {Character.equipped} into the enemy.");
+            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
+
             //Get dmg of equipped weapon for all these actions
         }
         public static void Slash()
@@ -352,11 +394,20 @@ namespace FireShrine
                         ConsoleKey keyPress = Console.ReadKey(true).Key;
                         if (keyPress == ConsoleKey.E)
                         {
-                            Character.equipped = Character.Inventory[inspect - 1][0][0];
-                            string Attri = Character.Inventory[inspect - 1][3][0];
-                            Console.WriteLine($"Equipped the {Character.Inventory[inspect - 1][0][0]}" );
+                            if (Character.Inventory[inspect - 1][0][0] == Character.equipped)
+                            {
+                                Console.WriteLine($"You unequiped the {Character.equipped}");
+                                Character.equipped = "Fists";
+                                BattleActions.MoveList();
+                            }
+                            else
+                            {
+                                Character.equipped = Character.Inventory[inspect - 1][0][0];
+                                string Attri = Character.Inventory[inspect - 1][3][0];
+                                Console.WriteLine($"Equipped the {Character.Inventory[inspect - 1][0][0]}");
+                                BattleActions.MoveList();
+                            }                            
                         }
-
                     }
 
 
@@ -475,10 +526,9 @@ namespace FireShrine
     {
         static string playerName;
         public static string[] attrilist = { "Container", "Melee Weapon", "Ranged Weapon", "Can Hold Liquid", "Flammable", "Toxic", "Sharp", "Blunt", "Edible", "Drink", "Cursed" };
-        public static int maxInventory = 2;
+        public static int maxInventory = 2; //effectively 3
         static int nextSlot = 0;
         public static bool isInBattle = false;
-        public static int turncounter = 0;
 
 
 
@@ -524,8 +574,6 @@ namespace FireShrine
         //custom adding of items to inventory with Name, Description, Damage, Attributes, and Durability
         public static void BeliAdd(string[] itemname, string[] descript, string[] damrange, string[] attrib, string[] dura, string[] ammo)
         {
-
-
             if (nextSlot > maxInventory)
             {
                 Console.WriteLine("Inventory is Full");
@@ -535,12 +583,8 @@ namespace FireShrine
             {
                 Character.Inventory.Insert(nextSlot, new string[6][] { itemname, descript, damrange, attrib, dura, ammo });
                 nextSlot++;
+                Story.ColorChanger(ConsoleColor.Blue, $"{itemname[0]} added to inventory");
             }
-            var currentcolor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"{itemname[0]} added to inventory");
-            Console.ForegroundColor = currentcolor;
-
         }
         public static void BeliDrop(int item)
         {
@@ -579,10 +623,13 @@ namespace FireShrine
         {
             Console.WriteLine("Here be the testing envoirnment");
             Story.Continue(0);
+            maxInventory = 3;
             BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
             BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
             BeliAdd(new string[] { "God Blade" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
+            BeliAdd(new string[] { "God Blade2" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
 
+            Character.equipped = "Knife";
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",
@@ -598,10 +645,14 @@ namespace FireShrine
         static void Battle(Entities Enemy) //give a entity when calling
         {
             Console.WriteLine($"You've engaged in combat with the {Enemy.Name}");
-            Console.WriteLine("Kill Or Be Killed.");
+            Console.WriteLine("                        Kill Or Be Killed.");
+            int turncounter = 0; //use this to control buffs that last longer than 1 turn
 
             while (isInBattle == true)
             {
+                Console.WriteLine("Health: {0}", Character.hpFraction);
+                Console.WriteLine();
+                Console.WriteLine();
                 Random diceroll = new Random();
                 //put in Random battle messages here
                 //Player Turn
@@ -618,18 +669,24 @@ namespace FireShrine
                 {
                     keypress = Console.ReadKey(true).Key;
                 }
-                switch (keypress)
+                switch (keypress)//add logic to add move acceptable keypresses if there are more than 3 actions for a weapon
                 {
                     case ConsoleKey.D1:
-                        
+                        BattleActions.ActstoActions(Character.battleActs[0]);
                         break;                        
                     case ConsoleKey.D2:
+                        BattleActions.ActstoActions(Character.battleActs[1]);
+                        break;
+                    case ConsoleKey.D3:
+                        BattleActions.ActstoActions(Character.battleActs[2]);
                         break;
                     default:
                         HUD.MenuSelection(keypress);
                         continue;                        
 
                 }
+                //remove enemy buffs from last turn
+                //AttackList.RemoveAllEnemyBuffs(Enemy);
                                
 
 
@@ -648,7 +705,10 @@ namespace FireShrine
                     AttackList.Bite(Enemy);
                     if (BattleActions.parryState == true)
                     {
-
+                        Console.WriteLine("You manage to return some damage.");
+                        int parryDamage = 2;
+                        Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
+                        Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
                     }
                 }
                 if (EnemyAttack == "Bulwark")
@@ -671,7 +731,7 @@ namespace FireShrine
              
 
 
-
+                //remove character buffs
 
                 if (Character.currentHealth < 0)
                 {
