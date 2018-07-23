@@ -58,7 +58,7 @@ namespace FireShrine
             Console.ForegroundColor = color;
             Console.WriteLine(Text);
             Console.ForegroundColor = currentcolor;
-        }
+         }
         public static void Story01()
         {
             Story.Chapter = "01";
@@ -132,7 +132,7 @@ namespace FireShrine
                 Console.WriteLine();
 
                 Console.WriteLine("You try to recall how you ended up here, but it fails you. The only images that flash through your mind do not" +
-                    " explain where you are and have no correlation with each other. A train, a door, and a computer or a machine of sorts. A sense " +
+                    " explain where you are and have no correlation with each other. A machine being one of them. A sense " +
                     "of urgency begins to rise within just before a hollow knock echoes through these old walls.");
                 Continue(0);
                 Console.WriteLine("What will you do?");
@@ -146,8 +146,8 @@ namespace FireShrine
                         Story02a();
                         break;
                     case 2:
-                        Console.WriteLine("You approach grand staircase, marveling at its sheer magnitude and architecture. As you near the head of the stairs you peer over the ledge and feel " +
-                            "mild vertigo. The two arms of the staircase wrap around the circular room to the ground below where lies nothing but more, albeit lesser ruin. That is when you notice several motionless figures on the steps. People.");
+                        Console.WriteLine("You approach grand staircase, marveling at its sheer magnitude and architecture. As you near the head of the stairs you peer over the broken ledge and " +
+                            "mild vertigo sets deep into your gut. The two arms of the staircase wrap around the circular chamber to the ground below where lies nothing but more ruin. That is when you notice several motionless figures on the steps. People.");
                         Story02b();
                         break;
                     case 3:
@@ -163,7 +163,7 @@ namespace FireShrine
             else
             {
                 Console.WriteLine("You try to recall how you ended up here, but it fails you. The only images that flash through your mind do not" +
-                    " explain where you are and have no correlation with each other. A train, a door, and a computer or a machine of sorts. A sense " +
+                    " explain where you are and have no correlation with each other. A machine being one of them. A sense " +
                     "of urgency begins to rise within just before a hollow knock echoes through these old walls.");
                 Continue(1);
 
@@ -215,7 +215,6 @@ namespace FireShrine
                 Character.currentHunger++;
                 Program.BeliAdd(new string[] { "Apple" }, new string[] { "It isn't crisp, but it'll do" }, new string[] { "1", "1", }, new string[] { Program.attrilist[8] }, new string[] { "1" }, null);
                 //for edible items the dam range corresponds to lower number hunger, upper number thirst, the health restored or removed refers to dura.
-                //Menues.ChoiceSelection("Dev Test", "Dev Test", "Dev Test", null, null);
             }
             else
             {

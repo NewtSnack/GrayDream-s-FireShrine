@@ -271,7 +271,7 @@ namespace FireShrine
                     }
                     if (Character.Inventory[inspect - 1][3].Contains("Ranged Weapon"))
                     {
-                        Console.WriteLine("Ammunition:   " + Character.Inventory[inspect - 1][4][0] + " Shots Remaining");
+                        Console.WriteLine("Ammunition:   " + Character.Inventory[inspect - 1][5][0] + " Shots Remaining");
                     }
                     //show ammo if gun
                     if (Character.Inventory[inspect - 1][3].Contains("Edible") | Character.Inventory[inspect - 1][3].Contains("Drink"))
@@ -433,7 +433,7 @@ namespace FireShrine
     public class BattleActions
     {
         //BattleAction States/Buffs
-        public static bool parryState;
+        public static bool isParrying = false;
         public static bool isQuick = false;
         public static bool isShattering = false;
         public static bool isGuarding = false;
@@ -441,8 +441,8 @@ namespace FireShrine
         public static int invslot; // value is set when when MoveList is called. MoveList must be called when switching equipped item.
 
         static Random diceroll = new Random();
-        static int damvaluelow { get { return Int32.Parse(Character.Inventory[invslot][2][0]); } }
-        static int damvaluehigh { get { return Int32.Parse(Character.Inventory[invslot][2][1]); ; } }
+        static int Damvaluelow { get { return Int32.Parse(Character.Inventory[invslot][2][0]); } }
+        static int Damvaluehigh { get { return Int32.Parse(Character.Inventory[invslot][2][1]); ; } }
         public static int bulletsleft;
 
 
@@ -467,7 +467,7 @@ namespace FireShrine
                             }
                             if (itemAttri == "Ranged Weapon")
                             {
-                                Character.battleActs = new string[] { "Shoot", "Draw a Bead", "Double Tap" };
+                                Character.battleActs = new string[] { "Shoot", "Draw A Bead", "Double Tap" };
                                 invslot = i;
                                 break;
 
@@ -530,7 +530,7 @@ namespace FireShrine
         //sharp
         public static int Stab()
         {
-            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
             int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
             Console.WriteLine($"You rush foward to plunge the {Character.equipped} into the enemy.");
             Story.Continue(0);
@@ -542,7 +542,7 @@ namespace FireShrine
         public static int Slash()
         {
             isQuick = true;
-            int weapondmg = diceroll.Next(damvaluelow - 1, damvaluehigh + 1);
+            int weapondmg = diceroll.Next(Damvaluelow - 1, Damvaluehigh + 1);
             int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
             Console.WriteLine("You unleash a flurry of quick strikes");
             Story.Continue(0);
@@ -550,7 +550,7 @@ namespace FireShrine
         }
         public static int Parry()
         {
-            parryState = true;
+            isParrying = true;
             Console.WriteLine("You stand ready to counter.");
             Story.Continue(0);
             return 0;
@@ -559,7 +559,7 @@ namespace FireShrine
         //blunt
         public static int Swing()
         {
-            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
             int damageDealt = weapondmg + diceroll.Next(Character.strength - 3, Character.strength);
             Console.WriteLine($"You swing the {Character.equipped} in a wide arc.");
             Story.Continue(0);
@@ -568,7 +568,7 @@ namespace FireShrine
         public static int Smash()
         {
             isShattering = true;
-            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
             int damageDealt = weapondmg + diceroll.Next(Character.strength - 2, Character.strength);
             Console.WriteLine($"You raise the {Character.equipped} high above your head.");
             int roll = diceroll.Next(100);
@@ -608,7 +608,7 @@ namespace FireShrine
                 Story.Continue(0);
                 return 0;
             }
-            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
             int damageDealt = weapondmg;
             int roll = diceroll.Next(0, 5) + Character.dexterity / 2; //chancetohit
             Console.WriteLine("You pull the trigger...");
@@ -617,6 +617,7 @@ namespace FireShrine
                 damageDealt = 0;
             }
             bulletsleft--;
+            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
             Story.Continue(0);
             return damageDealt;
         }
@@ -630,8 +631,8 @@ namespace FireShrine
                 return 0;
             }
             //chance to do dmg twice,
-            double weapondmg1 = damvaluehigh * .6;
-            double weapondmg2 = damvaluehigh * .7;
+            double weapondmg1 = Damvaluehigh * .6;
+            double weapondmg2 = Damvaluehigh * .7;
             Console.WriteLine("Deftly, you let loose two controlled shots!");
 
             int roll1 = diceroll.Next(0, 10) + (Character.dexterity / 3);
@@ -640,21 +641,17 @@ namespace FireShrine
             {
                 Console.WriteLine("The first shot missed!");
                 weapondmg1 = 0;
-                bulletsleft++;
-
             }
             if (roll2 < 2)
             {
                 Console.WriteLine("The second shot missed!");
                 weapondmg2 = 0;
-                bulletsleft++;
-
             }
             int damageDealt = (int)(weapondmg1 + weapondmg2);
             bulletsleft--;
             bulletsleft--;
+            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
             Story.Continue(0);
-
             return damageDealt;
         }
         //Monk
@@ -785,11 +782,12 @@ namespace FireShrine
         {
             Console.WriteLine("Here be the testing envoirnment");
             Story.Continue(0);
-            maxInventory = 3;
+            maxInventory = 4;
             BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
             BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
             BeliAdd(new string[] { "God Blade" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
             BeliAdd(new string[] { "M9 Beretta" }, new string[] { "A Semi-automatic Pistol." }, new string[] { "8", "9" }, new string[] { Program.attrilist[2]}, new string[] { "12" }, new string[] { "8" });
+            BeliAdd(new string[] { "Flint-lock Pistol" }, new string[] { "A gunpowder triggered hand cannon." }, new string[] { "7", "7" }, new string[] { Program.attrilist[2] }, new string[] { "12" }, new string[] { "5" });
 
             Character.equipped = "Knife";
             Entities ManBat = new Entities
@@ -857,7 +855,7 @@ namespace FireShrine
                 {
                     FinalDamage = 0;
                 }
-                if (BattleActions.isQuick == false & Enemy.isDodgeing == true & BattleActions.parryState == false & BattleActions.isGuarding == false)
+                if (BattleActions.isQuick == false & Enemy.isDodgeing == true & BattleActions.isParrying == false & BattleActions.isGuarding == false)
                 {
                     Console.WriteLine("The attack was too slow to land!");
                     FinalDamage = 0;
@@ -873,7 +871,7 @@ namespace FireShrine
                     
                     Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} takes {FinalDamage} Damage!");
                 }
-                if (FinalDamage == 0 & BattleActions.parryState == false & BattleActions.isGuarding == false & BattleActions.isAiming == false)
+                if (FinalDamage == 0 & BattleActions.isParrying == false & BattleActions.isGuarding == false & BattleActions.isAiming == false)
                 {
                     Console.WriteLine("You missed...");
                 }
@@ -911,7 +909,7 @@ namespace FireShrine
                     skillstateA = turncounter;
                 }
 
-                if (BattleActions.parryState)
+                if (BattleActions.isParrying)
                 {
                     Character.armor = Character.armor + 2;
                     skillstateP = turncounter;
@@ -935,7 +933,7 @@ namespace FireShrine
                 if (Enemy.isOverwhelming == true)
                 {
                     AttackList.Overwhelm2(Enemy);
-                    if (BattleActions.parryState == true)
+                    if (BattleActions.isParrying == true)
                     {
                         Console.WriteLine("You manage to return some damage.");
                         int parryDamage = 2;
@@ -949,7 +947,7 @@ namespace FireShrine
                     if (EnemyAttack == "Bite")
                     {
                         AttackList.Bite(Enemy);
-                        if (BattleActions.parryState == true)
+                        if (BattleActions.isParrying == true)
                         {
                             Console.WriteLine("You manage to return some damage.");
                             int parryDamage = 2;
@@ -980,7 +978,7 @@ namespace FireShrine
                 BattleActions.isQuick = false;
                 BattleActions.isShattering = false;
                 BattleActions.isGuarding = false;
-                BattleActions.parryState = false;
+                BattleActions.isParrying = false;
 
                 if (Character.currentHealth < 0)
                 {

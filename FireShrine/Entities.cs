@@ -44,7 +44,7 @@ namespace FireShrine
             Character.currentHealth = Character.currentHealth - damageDealt;
             if (damageDealt != 0)
             {
-                Story.ColorChanger(ConsoleColor.Red, $"Bite Deals {damageDealt} to you.");
+                Story.ColorChanger(ConsoleColor.Red, $"Bite Deals {damageDealt} damage to you.");
             }
             else
             {
