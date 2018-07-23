@@ -10,14 +10,15 @@ namespace FireShrine
     {
         public string Name = "Beast";
         public int HealthPoints = 10;
-        public int Defense = 5;
+        public int Defense = 3;
         public int DodgeRating = 2;
         public string[] movelist = new string[] { "Attack1", "Attack2" };
-        public int BaseDamage = 2;
+        public int BaseDamage = 3;
 
         public bool isFlying = false;
         public bool isDodgeing = false;
         public bool isBulwarked = false;
+        public bool isOverwhelming = false;
     }
     public class AttackList
     {
@@ -34,8 +35,12 @@ namespace FireShrine
             Console.WriteLine($"{Enemy.Name} Uses Bite!");
             Story.Continue(0);
             Random _rand = new Random();//dmgs
-            int modifier = _rand.Next(-2, 2);
+            int modifier = _rand.Next(-1, 2);
             var damageDealt = Enemy.BaseDamage + modifier - Character.armor;
+            if (damageDealt < 0)
+            {
+                damageDealt = 0;
+            }
             Character.currentHealth = Character.currentHealth - damageDealt;
             if (damageDealt != 0)
             {
@@ -43,7 +48,7 @@ namespace FireShrine
             }
             else
             {
-                Story.ColorChanger(ConsoleColor.Red, $"{Enemy.Name} Missed!");
+                Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} Missed!");
             }
         }
         public static void Hunt(Entities Enemy) //if enemy uses this you can only hit them if the attack isQuick.
@@ -69,6 +74,28 @@ namespace FireShrine
             Enemy.isBulwarked = false;
             Enemy.Defense = Enemy.Defense - 3;
             Console.WriteLine($"{Enemy.Name} has lost bulwark.");
+        }
+        public static void Overwhelm2(Entities Enemy)
+        {
+            Console.WriteLine($"{Enemy.Name} Uses Overwhelm!");
+            Story.Continue(0);
+            Random _rand = new Random();//dmgs
+            int modifier = _rand.Next(1, 2);
+            var damageDealt = Enemy.BaseDamage + 4 + modifier - Character.armor;
+            if (damageDealt < 0)
+            {
+                damageDealt = 0;
+            }
+            if (damageDealt == 0)
+            {
+                Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} Missed!");
+            }
+            else
+            {
+                Character.currentHealth = Character.currentHealth - damageDealt;
+
+                Story.ColorChanger(ConsoleColor.Red, $"{Enemy.Name} tears into you and deals {damageDealt} to you.");
+            }
 
         }
     }

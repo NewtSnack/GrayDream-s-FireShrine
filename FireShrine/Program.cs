@@ -12,24 +12,28 @@ namespace FireShrine
         public static double vitality = Math.Round((10 + (strength + 2.00) / 5.00));
         public static int armor = 3;
         public static int strength = 5;
-        public static int dexterity = 5;
+        public static int dexterity = 4;
         public static int initiative = 3;
         public static int mental = 5;
         public static int MaxSanity = 10;
-        public static string hpFraction = currentHealth.ToString() + "/" + vitality.ToString();
-        public static string mindFraction = mental.ToString() + "/" + MaxSanity.ToString();
-        public static float hpfractionActual = (float)currentHealth / (float)vitality;
+        //getters
+        public static string HpFraction { get { return (currentHealth.ToString() + "/" + vitality.ToString()); } }
+        public static string MindFraction { get { return (mental.ToString() + "/" + MaxSanity.ToString()); } }
+        public static float hpfractionActual { get { return (currentHealth / (float)vitality); } }
+        
         public static List<string[][]> Inventory = new List<string[][]>();
         public static string equipped = "Fists";
-        public static string[] battleActs = new string[] {"Punch", "Grab", "Block" };
+        public static string[] battleActs = new string[] {"Punch", "Grab", "Counter" };
 
         //survival stats
         static double maxHunger = 20;
         public static double currentHunger = 10;
-        static double hungerfraction = currentHunger / maxHunger;
         static double maxThirst = 20;
         public static double currentThirst = 10;
-        static double thirstfraction = currentThirst / maxThirst;
+
+        //getters
+        static double hungerfraction { get { return (currentHunger / maxHunger); } }
+        static double thirstfraction { get { return (currentThirst / maxThirst); } }
 
         public static void DisplayStats()
         {
@@ -42,7 +46,7 @@ namespace FireShrine
             //later may want to implement different message for the same threshold based on a rand.
 
             //HEALTH
-            Console.WriteLine("Health: {0}", hpFraction);
+            Console.WriteLine("Health: {0}", HpFraction);
             if (hpfractionActual < .2)
             {
                 ConsoleColor currentcolor = Console.ForegroundColor;
@@ -61,7 +65,7 @@ namespace FireShrine
 
             //SANITY
             Console.WriteLine();
-            Console.WriteLine("Sanity: {0}", mindFraction);
+            Console.WriteLine("Sanity: {0}", MindFraction);
             if (mental < 4)
             {
                 ConsoleColor currentcolor = Console.ForegroundColor;
@@ -152,100 +156,6 @@ namespace FireShrine
             Story.Continue(0);
         }
 
-    }
-    public class BattleActions
-    {
-        //BattleAction States/Buffs
-        public static bool parryState;
-        public static bool isQuick = false;
-        public static int invslot; // value is set when when MoveList is called. MoveList must be called when switching equipped item.
-
-        static Random diceroll = new Random();
-        static int damvaluelow = Int32.Parse(Character.Inventory[invslot][2][0]);
-        static int damvaluehigh = Int32.Parse(Character.Inventory[invslot][2][1]);
-
-
-        public static void MoveList()
-        {
-            if (Character.equipped != "Fists")
-            {
-                var num = Character.Inventory.Count();
-                for (int i = 0; i < Character.Inventory.Count(); i++)
-                {
-                    if (Character.Inventory[i][0][0] == Character.equipped)
-                    {
-                        for (var k = 0; k < (Character.Inventory[i][3]).Count(); k++)
-                        {
-                            int num2 = Character.Inventory[i][3].Count();
-                            var itemAttri = Character.Inventory[i][3][k];
-                            if (itemAttri == "Sharp")
-                            {
-                                Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
-                                invslot = i;
-                                break;
-                            }
-                            if (itemAttri == "Ranged Weapon")
-                            {
-                                Character.battleActs = new string[] { "Draw a Bead", "Shoot" };
-                                invslot = i;
-                                break;
-
-                            }
-                            if (itemAttri == "Blunt")
-                            {
-                                Character.battleActs = new string[] { "Smash", "Swing", "Block" };
-                                invslot = i;
-                                break;
-                            }
-                        }
-                    }                    
-                }
-            }
-            else
-            {
-                Character.battleActs = new string[] { "Punch", "Grab", "Block" };
-            }
-                
-                
-            
-                //var invslot = Character.Inventory.IndexOf(Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
-        }
-        public static void ActstoActions(string Acts)
-        {
-            switch (Acts)
-            {
-                case "Stab":
-                    Stab();
-                    break;
-                case "Slash":
-                    Slash();
-                    break;
-                case "Parry":
-                    Parry();
-                    break;
-                default:
-                    break;
-            }
-        }
-        public static void Stab()
-        {
-            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
-            Console.WriteLine($"You rush foward and plunge the {Character.equipped} into the enemy.");
-            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
-
-            //Get dmg of equipped weapon for all these actions
-        }
-        public static void Slash()
-        {
-            isQuick = true;
-            Console.WriteLine("You unleash a flurry of quick strikes");
-            Story.Continue(0);
-        }
-        public static void Parry()
-        {
-            parryState = true;
-            //deal dmg if attacked next turn
-        }
     }
 
     public class Menues
@@ -361,7 +271,7 @@ namespace FireShrine
                     }
                     if (Character.Inventory[inspect - 1][3].Contains("Ranged Weapon"))
                     {
-                        Console.WriteLine("Ammunition:   " + Character.Inventory[inspect - 1][4][0] + "Shots Remaining");
+                        Console.WriteLine("Ammunition:   " + Character.Inventory[inspect - 1][4][0] + " Shots Remaining");
                     }
                     //show ammo if gun
                     if (Character.Inventory[inspect - 1][3].Contains("Edible") | Character.Inventory[inspect - 1][3].Contains("Drink"))
@@ -520,6 +430,257 @@ namespace FireShrine
 
     }
 
+    public class BattleActions
+    {
+        //BattleAction States/Buffs
+        public static bool parryState;
+        public static bool isQuick = false;
+        public static bool isShattering = false;
+        public static bool isGuarding = false;
+        public static bool isAiming = false;
+        public static int invslot; // value is set when when MoveList is called. MoveList must be called when switching equipped item.
+
+        static Random diceroll = new Random();
+        static int damvaluelow { get { return Int32.Parse(Character.Inventory[invslot][2][0]); } }
+        static int damvaluehigh { get { return Int32.Parse(Character.Inventory[invslot][2][1]); ; } }
+        public static int bulletsleft;
+
+
+        public static void MoveList()
+        {
+            if (Character.equipped != "Fists")
+            {
+                var num = Character.Inventory.Count();
+                for (int i = 0; i < Character.Inventory.Count(); i++)
+                {
+                    if (Character.Inventory[i][0][0] == Character.equipped)
+                    {
+                        for (var k = 0; k < (Character.Inventory[i][3]).Count(); k++)
+                        {
+                            int num2 = Character.Inventory[i][3].Count();
+                            var itemAttri = Character.Inventory[i][3][k];
+                            if (itemAttri == "Sharp")
+                            {
+                                Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
+                                invslot = i;
+                                break;
+                            }
+                            if (itemAttri == "Ranged Weapon")
+                            {
+                                Character.battleActs = new string[] { "Shoot", "Draw a Bead", "Double Tap" };
+                                invslot = i;
+                                break;
+
+                            }
+                            if (itemAttri == "Blunt")
+                            {
+                                Character.battleActs = new string[] { "Swing", "Smash", "Block" };
+                                invslot = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (Character.Inventory[invslot][3][0] == "Ranged Weapon")
+                {
+                    bulletsleft = Int32.Parse(Character.Inventory[invslot][5][0]);
+                }
+            }
+            else
+            {
+                Character.battleActs = new string[] { "Punch", "Grab", "Block" };
+            }
+
+
+
+            //var invslot = Character.Inventory.IndexOf(Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
+        }
+        public static int ActstoActions(string Acts)
+        {
+            switch (Acts)
+            {
+                case "Stab":
+                    return Stab();
+                case "Slash":
+                    return Slash();
+                case "Parry":
+                    return Parry();
+                case "Smash":
+                    return Smash();
+                case "Swing":
+                    return Swing();
+                case "Block":
+                    return Block();
+                case "Punch":
+                    return Punch();
+                case "Grab":
+                    return Grab();
+                case "Counter":
+                    return Parry();//until i think of something cool for countering or want to change whats its based on.
+                case "Shoot":
+                    return Shoot();
+                case "Draw A Bead":
+                    return Draw_A_Bead();
+                case "Double Tap":
+                    return DoubleTap();
+                default:
+                    return 1;//this should never happen but now it will always return something
+            }
+        }
+        //sharp
+        public static int Stab()
+        {
+            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
+            Console.WriteLine($"You rush foward to plunge the {Character.equipped} into the enemy.");
+            Story.Continue(0);
+            return damageDealt;
+
+            //later add chance to bleed
+            //Get dmg of equipped weapon for all these actions
+        }
+        public static int Slash()
+        {
+            isQuick = true;
+            int weapondmg = diceroll.Next(damvaluelow - 1, damvaluehigh + 1);
+            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
+            Console.WriteLine("You unleash a flurry of quick strikes");
+            Story.Continue(0);
+            return damageDealt;
+        }
+        public static int Parry()
+        {
+            parryState = true;
+            Console.WriteLine("You stand ready to counter.");
+            Story.Continue(0);
+            return 0;
+            //deal dmg if attacked next turn
+        }
+        //blunt
+        public static int Swing()
+        {
+            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int damageDealt = weapondmg + diceroll.Next(Character.strength - 3, Character.strength);
+            Console.WriteLine($"You swing the {Character.equipped} in a wide arc.");
+            Story.Continue(0);
+            return damageDealt;
+        }
+        public static int Smash()
+        {
+            isShattering = true;
+            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int damageDealt = weapondmg + diceroll.Next(Character.strength - 2, Character.strength);
+            Console.WriteLine($"You raise the {Character.equipped} high above your head.");
+            int roll = diceroll.Next(100);
+            if (roll < 30) //30% chance to miss
+            {
+                Console.WriteLine($"The enemy dodges and the {Character.equipped} smashes into the ground.");
+                damageDealt = 0;
+            }
+            Story.Continue(0);
+
+            return damageDealt;
+
+        }
+
+        public static int Block()
+        {
+            Console.WriteLine("You bolster your defense");
+            isGuarding = true;
+            Story.Continue(0);
+
+            return 0;
+        }
+        //Gun
+        public static int Draw_A_Bead()
+        {
+            isAiming = true;
+            Console.WriteLine($"You line up the enemy in your sights. Chance to hit increased!");
+            Story.Continue(0);
+            return 0;
+            
+        }
+        public static int Shoot()
+        {
+            if (bulletsleft == 0) 
+            {
+                Console.WriteLine("You are out of ammo!");
+                Story.Continue(0);
+                return 0;
+            }
+            int weapondmg = diceroll.Next(damvaluelow, damvaluehigh);
+            int damageDealt = weapondmg;
+            int roll = diceroll.Next(0, 5) + Character.dexterity / 2; //chancetohit
+            Console.WriteLine("You pull the trigger...");
+            if (roll < 2)
+            {
+                damageDealt = 0;
+            }
+            bulletsleft--;
+            Story.Continue(0);
+            return damageDealt;
+        }
+        public static int DoubleTap()
+        {
+            if (bulletsleft == 0)
+            {
+                isQuick = true;
+                Console.WriteLine("You are out of ammo!");
+                Story.Continue(0);
+                return 0;
+            }
+            //chance to do dmg twice,
+            double weapondmg1 = damvaluehigh * .6;
+            double weapondmg2 = damvaluehigh * .7;
+            Console.WriteLine("Deftly, you let loose two controlled shots!");
+
+            int roll1 = diceroll.Next(0, 10) + (Character.dexterity / 3);
+            int roll2 = diceroll.Next(0, 10) + (Character.dexterity / 3);
+            if (roll1 < 3 )
+            {
+                Console.WriteLine("The first shot missed!");
+                weapondmg1 = 0;
+                bulletsleft++;
+
+            }
+            if (roll2 < 2)
+            {
+                Console.WriteLine("The second shot missed!");
+                weapondmg2 = 0;
+                bulletsleft++;
+
+            }
+            int damageDealt = (int)(weapondmg1 + weapondmg2);
+            bulletsleft--;
+            bulletsleft--;
+            Story.Continue(0);
+
+            return damageDealt;
+        }
+        //Monk
+        public static int Punch()
+        {
+            int damageDealt = diceroll.Next(Character.dexterity - 2, Character.dexterity);
+            Console.WriteLine("You find a oppertunity to strike!");
+            Story.Continue(0);
+
+            return damageDealt;
+        }
+        public static int Grab()
+        {
+            int damageDealt = diceroll.Next(Character.strength - 2, Character.strength);
+            Console.WriteLine("You manage to strangle and slam the enemy!");
+            Story.Continue(0);
+
+            return damageDealt;
+        }
+        //public static int Counter()
+        //{
+        //    int damageDealt = diceroll.Next(Character.strength - 2, Character.strength);
+        //    return damageDealt;
+        //}
+    }
+
 
 
     class Program
@@ -552,13 +713,14 @@ namespace FireShrine
         }
         public static void Title()
         {
-            Console.WriteLine(@"                                          ______ _          _____ _          _            ");
-            Console.WriteLine(@"                                          |  ___(_)        /  ___| |        (_)           ");
-            Console.WriteLine(@"                                          | |_   _ _ __ ___\ `--.| |__  _ __ _ _ __   ___ ");
-            Console.WriteLine(@"                                          |  _| | | '__/ _ \`--. \ '_ \| '__| | '_ \ / _ \");
-            Console.WriteLine(@"                                          | |   | | | |  __/\__/ / | | | |  | | | | |  __/");
-            Console.WriteLine(@"                                          \_|   |_|_|  \___\____/|_| |_|_|  |_|_| |_|\___|");
-            Console.WriteLine("                                                                                 -Darron C.");
+            Console.WriteLine(@"                                         ______ _          _____ _          _            ");
+            Console.WriteLine(@"                                         |  ___(_)        /  ___| |        (_)           ");
+            Console.WriteLine(@"                                         | |_   _ _ __ ___\ `--.| |__  _ __ _ _ __   ___ ");
+            Console.WriteLine(@"                                         |  _| | | '__/ _ \`--. \ '_ \| '__| | '_ \ / _ \");
+            Console.WriteLine(@"                                         | |   | | | |  __/\__/ / | | | |  | | | | |  __/");
+            Console.WriteLine(@"                                         \_|   |_|_|  \___\____/|_| |_|_|  |_|_| |_|\___|");
+            Console.WriteLine();
+            Console.WriteLine("                                                                                                 -Darron C.");
             Story.Continue(1);
 
         }
@@ -627,7 +789,7 @@ namespace FireShrine
             BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
             BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
             BeliAdd(new string[] { "God Blade" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
-            BeliAdd(new string[] { "God Blade2" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
+            BeliAdd(new string[] { "M9 Beretta" }, new string[] { "A Semi-automatic Pistol." }, new string[] { "8", "9" }, new string[] { Program.attrilist[2]}, new string[] { "12" }, new string[] { "8" });
 
             Character.equipped = "Knife";
             Entities ManBat = new Entities
@@ -647,10 +809,14 @@ namespace FireShrine
             Console.WriteLine($"You've engaged in combat with the {Enemy.Name}");
             Console.WriteLine("                        Kill Or Be Killed.");
             int turncounter = 0; //use this to control buffs that last longer than 1 turn
-
+            int skillstateG = -3;//guard will last 1 turn
+            int skillstateP = -3;//parry will last 1 turn
+            int skillstateA = -3;//Aiming will last 1 turns
+            int FinalDamage;
             while (isInBattle == true)
             {
-                Console.WriteLine("Health: {0}", Character.hpFraction);
+                Console.WriteLine();
+                Console.WriteLine("Player Health: {0}", Character.HpFraction);
                 Console.WriteLine();
                 Console.WriteLine();
                 Random diceroll = new Random();
@@ -662,6 +828,7 @@ namespace FireShrine
                     i++;
                     Console.WriteLine($"({i}) {item}");
                 }
+                Console.WriteLine();
                 var keypress = Console.ReadKey(true).Key;
 
                 while (keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress != ConsoleKey.D3 & keypress
@@ -672,37 +839,102 @@ namespace FireShrine
                 switch (keypress)//add logic to add move acceptable keypresses if there are more than 3 actions for a weapon
                 {
                     case ConsoleKey.D1:
-                        BattleActions.ActstoActions(Character.battleActs[0]);
+                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[0]);//return dmgdealt
                         break;                        
                     case ConsoleKey.D2:
-                        BattleActions.ActstoActions(Character.battleActs[1]);
+                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[1]);
                         break;
                     case ConsoleKey.D3:
-                        BattleActions.ActstoActions(Character.battleActs[2]);
+                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[2]);
                         break;
                     default:
                         HUD.MenuSelection(keypress);
                         continue;                        
 
                 }
+                FinalDamage = (int)(FinalDamage - Enemy.Defense * .5);
+                if (FinalDamage < 0)
+                {
+                    FinalDamage = 0;
+                }
+                if (BattleActions.isQuick == false & Enemy.isDodgeing == true & BattleActions.parryState == false & BattleActions.isGuarding == false)
+                {
+                    Console.WriteLine("The attack was too slow to land!");
+                    FinalDamage = 0;
+                }
+                if (BattleActions.isShattering == true & Enemy.isBulwarked)
+                {
+                    Console.WriteLine("You break your enemy's defenses!");
+                    AttackList.DeBulwark(Enemy);
+                }
+                if (FinalDamage != 0)
+                {
+                    Enemy.HealthPoints = (int)(Enemy.HealthPoints - (FinalDamage - Enemy.Defense*.8));
+                    
+                    Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} takes {FinalDamage} Damage!");
+                }
+                if (FinalDamage == 0 & BattleActions.parryState == false & BattleActions.isGuarding == false & BattleActions.isAiming == false)
+                {
+                    Console.WriteLine("You missed...");
+                }
+
+
+
                 //remove enemy buffs from last turn
+                Enemy.isDodgeing = false;
+                if (Enemy.isBulwarked == true)
+                {
+                    AttackList.DeBulwark(Enemy);
+
+                }
+
                 //AttackList.RemoveAllEnemyBuffs(Enemy);
-                               
-
-
-                if (Enemy.HealthPoints < 0)
+                if (Enemy.HealthPoints <= 0)
                 {
                     isInBattle = false;
-                    Console.WriteLine("You've slain the creature.");
+                    Console.WriteLine($"{Enemy.Name} has been killed.");
+                    Story.Continue(0);
+                    break;
                 }
+
+
                 Thread.Sleep(100);
                 //Enemy Turn
-                var EnemyAttack = Enemy.movelist[diceroll.Next(0, Enemy.movelist.Count())];
+                if (BattleActions.isGuarding)
+                {
+                    Character.armor = Character.armor + 5;
+                    skillstateG = turncounter; 
+                }
+                if (BattleActions.isAiming)
+                {
+                    Character.dexterity = Character.dexterity + 5;
+                    skillstateA = turncounter;
+                }
+
+                if (BattleActions.parryState)
+                {
+                    Character.armor = Character.armor + 2;
+                    skillstateP = turncounter;
+                }
+                //turn debuffing
+                if (turncounter - skillstateG == 1)
+                {
+                    Character.armor = Character.armor - 5;
+                }
+                if (turncounter - skillstateA == 1)
+                {
+                    Character.dexterity = Character.dexterity - 5;
+                }
+                if (turncounter - skillstateP == 1)
+                {
+                    Character.armor = Character.armor - 2;
+                }
+                var EnemyAttack = Enemy.movelist[diceroll.Next(0, Enemy.movelist.Count())]; //every skill has equal chance, change this logic to make certain attacks more weighted.
 
                 //AttackList
-                if (EnemyAttack == "Bite")
+                if (Enemy.isOverwhelming == true)
                 {
-                    AttackList.Bite(Enemy);
+                    AttackList.Overwhelm2(Enemy);
                     if (BattleActions.parryState == true)
                     {
                         Console.WriteLine("You manage to return some damage.");
@@ -710,28 +942,45 @@ namespace FireShrine
                         Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
                         Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
                     }
+                    Enemy.isOverwhelming = false;
                 }
-                if (EnemyAttack == "Bulwark")
+                else
                 {
-                    int skillcounter1 = turncounter;
-                    AttackList.Bulwark(Enemy);
-                }
-                if (EnemyAttack == "Hunt")
-                {
-                    AttackList.Hunt(Enemy);
-                }
-                if (EnemyAttack == "Overwhelm")
-                {
-                    AttackList.Overwhelm(Enemy);
-                    if (BattleActions.parryState == true)
+                    if (EnemyAttack == "Bite")
                     {
-
+                        AttackList.Bite(Enemy);
+                        if (BattleActions.parryState == true)
+                        {
+                            Console.WriteLine("You manage to return some damage.");
+                            int parryDamage = 2;
+                            Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
+                            Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
+                        }
+                    }
+                    if (EnemyAttack == "Bulwark")
+                    {
+                        int skillcounter1 = turncounter;
+                        AttackList.Bulwark(Enemy);
+                    }
+                    if (EnemyAttack == "Hunt")
+                    {
+                        AttackList.Hunt(Enemy);
+                    }
+                    if (EnemyAttack == "Overwhelm")
+                    {
+                        AttackList.Overwhelm(Enemy);
+                        Enemy.isOverwhelming = true;
                     }
                 }
-             
+                
 
 
-                //remove character buffs
+
+                //remove character attack buffs
+                BattleActions.isQuick = false;
+                BattleActions.isShattering = false;
+                BattleActions.isGuarding = false;
+                BattleActions.parryState = false;
 
                 if (Character.currentHealth < 0)
                 {
@@ -741,12 +990,10 @@ namespace FireShrine
                     Environment.Exit(1);
                     //Trigger PlayDeath()
                 }
+                turncounter++;
             }
 
-        }
-        public static void AttackToMethod()
-        {
-
-        }
+        }        
     }
+
 }
