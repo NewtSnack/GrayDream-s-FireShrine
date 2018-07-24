@@ -763,7 +763,7 @@ namespace FireShrine
             Character.currentHunger = Character.currentHunger - tick;
             Character.currentThirst = Character.currentThirst - tick * 1.7;
         }
-        public static string[] ItemGetByAttribute(string[] Attribute) //Searches inventory by attribute and returns the name string
+        public static string ItemGetByAttribute(string Attribute) //Searches inventory by attribute and returns the name string
         {
             List<string> returnSearch = new List<string>();
 
@@ -773,7 +773,7 @@ namespace FireShrine
                 {
                     returnSearch.Add(item[0][0]);
                     string[] ArraySearch = returnSearch.ToArray();
-                    return ArraySearch;
+                    return ArraySearch[0];
                 }
             }
             return null;
@@ -802,7 +802,7 @@ namespace FireShrine
             Battle(ManBat);
         }
 
-        static void Battle(Entities Enemy) //give a entity when calling
+        public static void Battle(Entities Enemy) //give a entity when calling
         {
             Console.WriteLine($"You've engaged in combat with the {Enemy.Name}");
             Console.WriteLine("                        Kill Or Be Killed.");
@@ -919,9 +919,10 @@ namespace FireShrine
                 {
                     Character.armor = Character.armor - 5;
                 }
-                if (turncounter - skillstateA == 1)
+                if (turncounter - skillstateA == 2)
                 {
                     Character.dexterity = Character.dexterity - 5;
+                    BattleActions.isAiming = false;
                 }
                 if (turncounter - skillstateP == 1)
                 {
