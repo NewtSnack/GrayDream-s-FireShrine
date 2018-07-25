@@ -253,7 +253,7 @@ namespace FireShrine
                                 break;
                         }
 
-                        Story.Continue(1);
+                        Story.Continue(0);
                         Console.Clear();
                         break;
                         //move jumptostory outside these methods.
@@ -262,6 +262,7 @@ namespace FireShrine
                 if (theChoice == 0)
                 {
                     Story.JumpToStory();
+                    break;
                 }
             }
             Console.Clear();

@@ -9,7 +9,7 @@ namespace FireShrine
     public class Entities
     {
         public string Name = "Beast";
-        public int HealthPoints = 10;
+        public int HealthPoints = 20;
         public int Defense = 3;
         public int DodgeRating = 2;
         public string[] movelist = new string[] { "Attack1", "Attack2" };

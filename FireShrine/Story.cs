@@ -376,7 +376,7 @@ namespace FireShrine
                 Console.WriteLine("Another guttural screech as phlegm and salvia expels from between razor sharp teeth, and it charges. ");
                 Continue(0);
                 ColorChanger(ConsoleColor.Red, "You've suffered 2 damage");
-                ColorChanger(ConsoleColor.Cyan, "The monster has suffered 3 damage.");
+                ColorChanger(ConsoleColor.Green, "The monster has suffered 3 damage.");
 
                 Character.currentHealth = Character.currentHealth - 2;
                 Program.BeliAdd(new string[] { "M9 Beretta" }, new string[] { "A Semi-automatic Pistol." }, new string[] { "8", "9" }, new string[] { Program.attrilist[2] }, new string[] { "12" }, new string[] { "8" });
@@ -384,7 +384,7 @@ namespace FireShrine
                 {
                     Name = "Grotesque Bat",
                     movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
-                    HealthPoints = 7
+                    HealthPoints = 17
                 };
 
                 Program.isInBattle = true;
@@ -454,14 +454,14 @@ namespace FireShrine
                     " to leap from its back. You roll when you land prepared to fight right as the beast bellows a deep growl.");
             }
             ColorChanger(ConsoleColor.Green, "Battle Advantage!");
-            ColorChanger(ConsoleColor.Cyan, "The monster has suffered 2 damage.");
+            ColorChanger(ConsoleColor.Green, "The monster has suffered 2 damage.");
             Continue(0);
             Console.WriteLine("The bat creature hunches menacingly, ready to return the favor.");
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",
                 movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
-                HealthPoints = 8
+                HealthPoints = 18
             };
 
             Program.isInBattle = true;
@@ -594,11 +594,13 @@ namespace FireShrine
                         "clears, you see the beast lay nearby struggling to get to its feet, it managed to avoid a direct hit. You attack while you still have the advantage.");
                     Continue(0);
                     ColorChanger(ConsoleColor.Green, "Battle Advantage!");
+                    ColorChanger(ConsoleColor.Green, "Enemy has suffered 5 damage.");
+
                     Entities ManBat = new Entities
                     {
                         Name = "Grotesque Bat",
                         movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
-                        HealthPoints = 5                        
+                        HealthPoints = 15                        
                     };
 
                     Program.isInBattle = true;
@@ -646,13 +648,13 @@ namespace FireShrine
                     Continue(0);
                     Console.WriteLine("It wasn't a direct hit. You sprint to attack while you still have the chance.");
                     ColorChanger(ConsoleColor.Green, "Battle Advantage!");
-                    ColorChanger(ConsoleColor.Red, "2 Damage dealt to enemy.");
+                    ColorChanger(ConsoleColor.Red, "3 Damage dealt to enemy.");
 
                     Entities ManBat = new Entities
                     {
                         Name = "Grotesque Bat",
                         movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
-                        HealthPoints = 8
+                        HealthPoints = 17
                     };
 
                     Program.isInBattle = true;
@@ -677,7 +679,7 @@ namespace FireShrine
                     {
                         Name = "Grotesque Bat",
                         movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
-                        HealthPoints = 9
+                        HealthPoints = 19
                     };
 
                     Program.isInBattle = true;
