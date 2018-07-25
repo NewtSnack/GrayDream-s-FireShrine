@@ -171,6 +171,7 @@ namespace FireShrine
 
                 Console.WriteLine("(1) {0}", choice1);
                 Console.WriteLine("(2) {0}", choice2);
+                chooseAmount = 2;
                 if (choice3 != null)
                 {
                     chooseAmount = 3;
@@ -187,10 +188,35 @@ namespace FireShrine
                     }
                 }
                 var keyPress = Console.ReadKey(true).Key;
-                while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.D4 & keyPress != ConsoleKey.D5
-                     & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
+
+                if (chooseAmount == 3)
                 {
-                    keyPress = Console.ReadKey(true).Key;
+                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
+                    {
+                        keyPress = Console.ReadKey(true).Key;
+                    }
+                }
+                else if (chooseAmount == 4)
+                {
+                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.D4 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
+                    {
+                        keyPress = Console.ReadKey(true).Key;
+                    }
+                }
+                else if (chooseAmount == 5)
+                {
+                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.D4 & keyPress != ConsoleKey.D5
+                         & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
+                    {
+                        keyPress = Console.ReadKey(true).Key;
+                    }
+                }
+                else
+                {
+                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
+                    {
+                        keyPress = Console.ReadKey(true).Key;
+                    }
                 }
 
                 switch (keyPress)

@@ -11,3 +11,4 @@ C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShri
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.csproj.CoreCompileInputs.cache
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.exe
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.pdb
+C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.csprojAssemblyReference.cache
