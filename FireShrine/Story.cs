@@ -189,8 +189,6 @@ namespace FireShrine
                 Console.WriteLine("In the center a small pig roast that was half done into exposing rib and spine. Rot had set into most of the meals but upon closer inspection you see that the food couldn’t have been left rotting for more than a couple days. Several untouched apples sit in a" +
                 " bowl next to the roast and they seem safe enough to eat, so that is in fact what you do.");
                 Console.WriteLine("You also shove one into your pocket.");
-
-
                 Continue(0);
                 ColorChanger(ConsoleColor.Cyan, "Gain Health and Fullness from eating");
                 Character.currentHealth++;
@@ -200,8 +198,8 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("As you finish, you hear another sound. Rhythmic. Closer than before. It sounds like footsteps, too massive to belong to a person. The thumping, the only sound in this" +
                     " derelict building, as if it was its old beating heart. It’s coming from the somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
+                storysent = true;
                 Selection = Menues.ChoiceSelection("You know no fear, Attack", "Find a place to hide", null, null, null);
-
             }
             else
             {
@@ -255,8 +253,8 @@ namespace FireShrine
                     " in your gut. ");
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
                 storysent = true;
+                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
             }
             else
             {
@@ -403,8 +401,8 @@ namespace FireShrine
                     " in your gut. ");
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
                 storysent = true;
+                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
 
             }
             else
@@ -496,8 +494,8 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                     " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you." );
-                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
                 storysent = true;
+                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
                 
             }
             else
