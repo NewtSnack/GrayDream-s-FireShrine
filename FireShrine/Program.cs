@@ -543,7 +543,7 @@ namespace FireShrine
         {
             isQuick = true;
             int weapondmg = diceroll.Next(Damvaluelow - 1, Damvaluehigh + 1);
-            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
+            int damageDealt = weapondmg + diceroll.Next(0, Character.strength);
             Console.WriteLine("You unleash a flurry of quick strikes");
             Story.Continue(0);
             return damageDealt;
@@ -853,7 +853,7 @@ namespace FireShrine
                         continue;                        
 
                 }
-                FinalDamage = (int)(FinalDamage - Enemy.Defense * .5);
+                FinalDamage = (int)(FinalDamage - Enemy.Defense  /3);
                 if (FinalDamage < 0)
                 {
                     FinalDamage = 0;
@@ -870,7 +870,7 @@ namespace FireShrine
                 }
                 if (FinalDamage != 0)
                 {
-                    Enemy.HealthPoints = (int)(Enemy.HealthPoints - (FinalDamage - Enemy.Defense*.8));
+                    Enemy.HealthPoints = (int)(Enemy.HealthPoints - (FinalDamage));
                     
                     Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} takes {FinalDamage} Damage!");
                 }
@@ -940,7 +940,7 @@ namespace FireShrine
                     if (BattleActions.isParrying == true)
                     {
                         Console.WriteLine("You manage to return some damage.");
-                        int parryDamage = 2;
+                        int parryDamage = Character.dexterity - 2 + diceroll.Next(0,1);
                         Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
                         Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
                     }

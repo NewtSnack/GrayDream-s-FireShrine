@@ -52,6 +52,14 @@ namespace FireShrine
             {
                 Story02c();
             }
+            if (Chapter == "02ab")
+            {
+                Story02ab();
+            }
+            if (Chapter == "02bb")
+            {
+                Story02bb();
+            }           
         }
         public static void ColorChanger(ConsoleColor color, string Text)
         {
@@ -254,12 +262,12 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
                 storysent = true;
-                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
             }
             else
             {
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
             }
             switch (Selection)
             {
