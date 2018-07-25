@@ -134,20 +134,18 @@ namespace FireShrine
 
                 Console.WriteLine("You try to recall how you ended up here, but it fails you. The only images that flash through your mind do not" +
                     " explain where you are and have no correlation with each other. A machine being one of them. A sense " +
-                    "of urgency begins to rise within just before a hollow knock echoes through these old walls.");
+                    "of urgency begins to rise within you when a hollow knock echoes through these old walls.");
                 Continue(0);
                 Console.WriteLine("What will you do?");
                 storysent = true;
                 Selection = Menues.ChoiceSelection("Search the dinner room.", "Move to the end of the room toward the grand staircase.", "Attempt to locate the direction of the noise.", null, null);
                
-
-                Continue(0);
             }
             else
             {
                 Console.WriteLine("You try to recall how you ended up here, but it fails you. The only images that flash through your mind do not" +
                     " explain where you are and have no correlation with each other. A machine being one of them. A sense " +
-                    "of urgency begins to rise within just before a hollow knock echoes through these old walls.");
+                    "of urgency begins to rise within you when a hollow knock echoes through these old walls.");
                 Continue(1);
 
                 Console.WriteLine();
@@ -165,10 +163,12 @@ namespace FireShrine
                 case 2:
                     Console.WriteLine("You approach grand staircase, marveling at its sheer magnitude and architecture. As you near the head of the stairs you peer over the broken ledge and " +
                         "mild vertigo sets deep into your gut. The two arms of the staircase wrap around the circular chamber to the ground below where lies nothing but more ruin. That is when you notice several motionless figures on the steps. People.");
+                    storysent = false;
                     Story02b();
                     break;
                 case 3:
                     Console.WriteLine("You take a knee in response to the knock, waiting for it to happen again. Time feels to slow to a halt as you listen to the still silence and gentle wind grooming the crumbling ramparts.");
+                    storysent = false;
                     Story02c();
                     break;
                 default:
@@ -318,7 +318,7 @@ namespace FireShrine
                 Console.WriteLine();
                 Console.WriteLine("Decide.");
                 storysent = true;
-                int Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
+                Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
                 
             }
             else
@@ -328,7 +328,7 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine();
                 Console.WriteLine("Decide.");
-                int Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
+                Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
             }
             switch (Selection)
             {
@@ -403,14 +403,14 @@ namespace FireShrine
                     " in your gut. ");
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
                 storysent = true;
 
             }
             else
             {
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                int Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
 
             }
             switch (Selection)
@@ -476,17 +476,17 @@ namespace FireShrine
 
             if (storysent == false)
             {
-                Console.WriteLine("    The smell of mold, wood and slightly rotten food hang in the dull air and the occasional avian chirp can be heard in the far distance. This place must truly be derelict." +
+                Console.WriteLine("The smell of mold, wood and slightly rotten food hang in the dull air and the occasional avian chirp can be heard in the far distance. This place must truly be derelict." +
                     " A second knocking dispels any preconception you have of inhabitance followed by a dragging sound. You are able to tell that the source is coming from floor beneath you at the bottom of a" +
                     " grand staircase but you are too far away to see down there.");
                 Continue(0);
-                Console.WriteLine("     Stealthily you move towards what’s left of the ledge near the head of the stairs. The dinner room you are in seamlessly opens outward into a circular foyer where an extravagant" +
+                Console.WriteLine("Stealthily you move towards what’s left of the ledge near the head of the stairs. The dinner room you are in seamlessly opens outward into a circular foyer where an extravagant" +
                     " staircase curves to the ground below on either side. Most of what lies below and beyond remains in darkness partly due to the contrasting column of light in the center of the foyer from" +
                     " a shattered sky roof several floors above. You cautiously observe from your perch remaining close to the ground. You still hear dragging, and from beyond the column of light you can just make" +
                     " out the movement of a figure. It finally moves into view… ");
                 Continue(0);
                 Console.Clear();
-                Console.WriteLine("     A mix of horrible clicking and guttural breath hisses as a hulking figure laboriously moves into the center of the foyer. Its lumbered steps are slow and thundering, two beady " +
+                Console.WriteLine("A mix of horrible clicking and guttural breath hisses as a hulking figure laboriously moves into the center of the foyer. Its lumbered steps are slow and thundering, two beady " +
                     "points of light pierce through the dark before entering the light. It lurks about, as if searching. Dread looms over you, but it has not noticed you yet. You see the oddly long ears that protrude" +
                     " off the top of its head. It drags its feet lazily leaving deep scratches into the wood and has ferocious arms attached to wings that couldn’t possibly lift this creature. The wings are dragged along " +
                     "the floor as it moves sniffing the room and its ragged breath sets a pit in your gut. ");
@@ -494,17 +494,17 @@ namespace FireShrine
                 Console.WriteLine("     You feel uneasy observe this creature for any longer, as if doing so would allow it to somehow sense your presence, so you shrink away from the ledge. Your heart begins pound in" +
                     " your ears as you frantically look around room for anything that can help you. That’s when you notice a pile of debris at the far end of dining room near two large doors to your left.");
                 Continue(0);
-                Console.WriteLine("     You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
+                Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                     " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you." );
-                int Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
+                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
                 storysent = true;
                 
             }
             else
             {
-                Console.WriteLine("     You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
+                Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                      " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you.");
-                int Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
+                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
             }
             switch (Selection)
             {
@@ -615,11 +615,71 @@ namespace FireShrine
         private static void Story02cc() //Rope non Initiative
         {
             Chapter = "02cc";
+            bool Sharpitem = false;
+
             if (storysent == false)
             {
 
+                Console.WriteLine("You prepare to untie the rope as the creature walks into view. But without proper bait there is nothing keeping the creature drawn to the center of the room.");
                 storysent = true;
-            }
+                foreach (string[][] item in Character.Inventory)
+                {
+                    if (item[3].Contains("Sharp"))
+                    {
+                        Sharpitem = true;
+                    }
+                }
+                if (Sharpitem == true)
+                {
+                    string SharpitemName = Program.ItemGetByAttribute("Sharp");
+                    Console.WriteLine($"The beast is as close to the damage zone as you think it'll ever be. You take out your {SharpitemName} and start working on the thick twine. It is harder then you expected and you being to worry that the creature will hear you with its gigantic" +
+                            " ears and move out of the way. You grab the rope with your free hand for leverage and begin cutting more desperately now, sweat dropping from your brow. Not yet relenting, you sneak a quick glance at the dinner and with" +
+                            " a sudden and loud snap, the rope rips from your hands.");
+                    Continue(0);
+                    Console.WriteLine("The massive chandelier crashes into the table near where the beast was standing, cleaving the great table in half and sending silverware and wreckage in all directions as you leap behind the piano to avoid the debris.");
+                    Continue(0);
+                    Console.WriteLine("It wasn't a direct hit. You sprint to attack while you still have the chance.");
+                    ColorChanger(ConsoleColor.Green, "Battle Advantage!");
+                    ColorChanger(ConsoleColor.Red, "2 Damage dealt to enemy.");
+
+                    Entities ManBat = new Entities
+                    {
+                        Name = "Grotesque Bat",
+                        movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
+                        HealthPoints = 8
+                    };
+
+                    Program.isInBattle = true;
+                    BattleActions.MoveList();
+                    Program.Battle(ManBat);
+                }
+                else
+                {
+                    string BluntitemName = Program.ItemGetByAttribute("Blunt");
+                    Console.WriteLine("The beast is as close to the damage zone as you think it'll ever be. You began to work on untying the rope, it would be easier if you had something sharp to work with. It’s attached to a metal bar jutting from the wall in well-tied knots. You begin to worry that the" +
+                        " creature will hear you with its gigantic ears and move out of the way. Your hands begin to ache and skin beings to peel as you use all your strength to undo the thick twine knots.");
+                    Continue(0);
+                    Console.Clear();
+                    Console.WriteLine($"Sweat dripping from your brow, you steal a glance from the table and see that two beady eyes staring back at you. It sees you. In an act of desperation, you swing your {BluntitemName} at the metal bar as hard as you can, and" +
+                        " it goes flying, pulled up toward the ceiling. In the next instant, a loud crash fills the room, cleaving the great table in half and sending silverware and wreckage in all directions. You leap into cover to avoid getting hit. When the dust " +
+                        "clears, you see the beast lay nearby struggling to get to its feet, it wasn't a direct hit. You attack while you still have the advantage.");
+                    Continue(0);
+                    ColorChanger(ConsoleColor.Green, "Battle Advantage!");
+                    ColorChanger(ConsoleColor.Red, "1 Damage dealt to enemy.");
+
+                    Entities ManBat = new Entities
+                    {
+                        Name = "Grotesque Bat",
+                        movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" },
+                        HealthPoints = 9
+                    };
+
+                    Program.isInBattle = true;
+                    BattleActions.MoveList();
+                    Program.Battle(ManBat);
+                }
+                storysent = true;
+            }            
             else
             {
 

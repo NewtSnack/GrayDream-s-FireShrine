@@ -8,7 +8,6 @@ C:\Users\Dar\Source\Repos\GrayDream\FireShrine\obj\Debug\FireShrine.csprojResolv
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShrine.exe.config
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShrine.exe
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShrine.pdb
-C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.csprojAssemblyReference.cache
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.csproj.CoreCompileInputs.cache
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.exe
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.pdb

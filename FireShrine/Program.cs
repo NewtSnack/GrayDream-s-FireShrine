@@ -697,6 +697,9 @@ namespace FireShrine
             Title();
             GetPlayerName();
             StartGame();
+            Console.WriteLine("End of Demo.");
+            Story.Continue(0);
+
         }
         public static void GetPlayerName()
         {
