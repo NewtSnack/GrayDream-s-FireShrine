@@ -628,7 +628,7 @@ namespace FireShrine
         }
         public static int Shoot()
         {
-            if (bulletsleft == 0) 
+            if (bulletsleft <= 0) 
             {
                 Console.WriteLine("You are out of ammo!");
                 Story.Continue(0);
@@ -649,7 +649,7 @@ namespace FireShrine
         }
         public static int DoubleTap()
         {
-            if (bulletsleft == 0)
+            if (bulletsleft <= 0)
             {
                 isQuick = true;
                 Console.WriteLine("You are out of ammo!");
@@ -667,14 +667,23 @@ namespace FireShrine
             {
                 Console.WriteLine("The first shot missed!");
                 weapondmg1 = 0;
+                bulletsleft--;
+
             }
-            if (roll2 < 2)
+            if (bulletsleft <= 0)
             {
-                Console.WriteLine("The second shot missed!");
-                weapondmg2 = 0;
+                Console.WriteLine("You are out of ammo!");
             }
+            else
+            {
+                if (roll2 < 2)
+                {
+                    Console.WriteLine("The second shot missed!");
+                    weapondmg2 = 0;
+                }
+            }
+            
             int damageDealt = (int)(weapondmg1 + weapondmg2);
-            bulletsleft--;
             bulletsleft--;
             Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
             Story.Continue(0);
@@ -925,7 +934,7 @@ namespace FireShrine
                 }
 
 
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 //Enemy Turn
                 if (BattleActions.isGuarding)
                 {
