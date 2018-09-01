@@ -694,7 +694,7 @@ namespace FireShrine
         public static int Punch()
         {
             int damageDealt = diceroll.Next(Character.dexterity - 2, Character.dexterity);
-            Console.WriteLine("You find a oppertunity to strike!");
+            Console.WriteLine("You find an oppertunity to strike!");
             Story.Continue(0);
 
             return damageDealt;
