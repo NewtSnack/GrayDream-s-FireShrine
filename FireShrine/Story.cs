@@ -107,11 +107,14 @@ namespace FireShrine
             {
                 case 1:
                     Console.WriteLine("You Picked up the improvised Club");
+                    
                     Program.BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
                     break;
                 case 2:
                     Console.WriteLine("You Grabbed The Knife From the dinner table");
-                    Program.BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
+                    Blade Knife = new Blade("Dull Knife", "A small rusted carving knife.", 3);
+                    Knife.ToInv();
+                   // Program.BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
                     break;
 
             }
@@ -128,7 +131,7 @@ namespace FireShrine
             Chapter = "02";
             if (storysent == false)
             {
-                if (Character.Inventory[0][0].Contains("Knife"))
+                if (Character.Inventory2[0].Name == "Dull Knife")
                 {
                     Console.WriteLine("The blade shows signs of rust but is still sharp enough.");
                     Continue(0);

@@ -22,6 +22,7 @@ namespace FireShrine
         public static float hpfractionActual { get { return (currentHealth / (float)vitality); } }
         
         public static List<string[][]> Inventory = new List<string[][]>();
+        public static List<IItems> Inventory2 = new List<IItems>();
         public static string equipped = "Fists";
         public static string[] battleActs = new string[] {"Punch", "Grab", "Counter" };
 
@@ -784,12 +785,35 @@ namespace FireShrine
                 Story.ColorChanger(ConsoleColor.Blue, $"{itemname[0]} added to inventory");
             }
         }
+        public static void NuAdd(IItems Item)
+        {
+            if (nextSlot > maxInventory)
+            {
+                Console.WriteLine("Inventory is Full");
+                Console.WriteLine();
+            }
+            else
+            {
+                Character.Inventory2.Add(Item);
+                nextSlot++;
+                Story.ColorChanger(ConsoleColor.Blue, $"{Item.Name} added to inventory");
+            }
+        }
+        public static void NuDrop(IItems Item)
+        {
+            Story.ColorChanger(ConsoleColor.Blue, $"{Item.Name} Dropped from inventory");
+            Character.Inventory2.Remove(Item);
+        }
+        public static void NuUse(IItems Item)
+        {
+            Story.ColorChanger(ConsoleColor.Blue, $"{Item.Name} used.");
+
+        }
+
         public static void BeliDrop(int item)
         {
             //this should be called in the MenuSelection menu
-            Story.ColorChanger(ConsoleColor.Blue, $"{Character.Inventory[item][0]} Dropped from inventory");
             //later can implement a system to have the dropped item exist in game world.
-            Character.Inventory.RemoveAt(item);
         }
         public static void BeliUse(int item)
         {
