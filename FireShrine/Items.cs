@@ -20,6 +20,7 @@ namespace FireShrine
     }
     interface IEquippable
     {
+        string Name { get; set; }
         string WeaponType { get; set; }
         string[] Attributes { get; set; }
         void Equip();
@@ -63,6 +64,46 @@ namespace FireShrine
             throw new NotImplementedException();
         }
     }
+    class Blunt : IItems, IEquippable
+    {
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string WeaponType { get; set; } //blade class implies sharp attribute
+        public string[] Attributes { get; set; }
+
+        public int Damage { get; set; }
+
+
+        public Blunt(string name = "Blunt Generic", string description = "Heavy", int damage = 1)
+        {
+            Name = name;
+            Description = description;
+            Damage = damage;
+            WeaponType = "Blunt";
+        }
+        public void Equip()
+        {
+            Console.WriteLine($"{Name} has been Equipped.");
+        }
+
+        public void ToInv()
+        {
+            Program.NuAdd(this);
+        }
+
+        public void Drop()
+        {
+            Console.WriteLine($"{Name} has been removed from your inventory");
+            Character.Inventory2.Remove(this);
+        }
+
+        public void Inspect()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class Consumable : IItems, IUsable
     {
         public string Name { get; set; }

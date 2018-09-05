@@ -10,7 +10,7 @@ namespace FireShrine
     class Story
     {
         static bool storysent = false;
-        static int Selection = 0;
+        static ConsoleKey Selection;
         public static string Chapter;
 
         public static void Continue(int speed)
@@ -102,19 +102,19 @@ namespace FireShrine
                 Console.WriteLine("Would you prefer the wooden Club or the rusty Knife?");
                 Console.WriteLine();
             }
-            int Selection = Menues.ChoiceSelection("Club", "Knife", null, null, null);
+            string[] choices = { "Club", "Knife" };
+            Selection = Menus.ChoiceSelection(choices);
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     Console.WriteLine("You Picked up the improvised Club");
-                    
-                    Program.BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
+                    Blunt Club = new Blunt("Wooden Club", "A piece of furnishing was part of a chair.", 3);
+                    Club.ToInv();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     Console.WriteLine("You Grabbed The Knife From the dinner table");
                     Blade Knife = new Blade("Dull Knife", "A small rusted carving knife.", 3);
                     Knife.ToInv();
-                   // Program.BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
                     break;
 
             }
@@ -149,7 +149,8 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("What will you do?");
                 storysent = true;
-                Selection = Menues.ChoiceSelection("Search the dinner room.", "Move to the end of the room toward the grand staircase.", "Attempt to locate the direction of the noise.", null, null);
+                string[] choices = { "Search the dinner room.", "Move to the end of the room toward the grand staircase.", "Attempt to locate the direction of the noise." };
+                Selection = Menus.ChoiceSelection(choices);
                
             }
             else
@@ -161,23 +162,24 @@ namespace FireShrine
 
                 Console.WriteLine();
                 Console.WriteLine("What will you do?");
-                Selection = Menues.ChoiceSelection("Search the dinner Room.", "Move to the end of the room toward the large stairs.", "Attempt to locate the direction of the noise.", null, null);
+                string[] choices = { "Search the dinner room.", "Move to the end of the room toward the grand staircase.", "Attempt to locate the direction of the noise." };
+                Selection = Menus.ChoiceSelection(choices);
 
             }
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     Console.WriteLine("It seems this space was used to convene many, assumingly wealthy individuals. But any proof that people still reside in this desolate place is lost to you. ");
                     storysent = false;
                     Story02a();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     Console.WriteLine("You approach grand staircase, marveling at its sheer magnitude and architecture. As you near the head of the stairs you peer over the broken ledge and " +
                         "mild vertigo sets deep into your gut. The two arms of the staircase wrap around the circular chamber to the ground below where lies nothing but more ruin. That is when you notice several motionless figures on the steps. People.");
                     storysent = false;
                     Story02b();
                     break;
-                case 3:
+                case ConsoleKey.D3:
                     Console.WriteLine("You take a knee in response to the knock, waiting for it to happen again. Time feels to slow to a halt as you listen to the still silence and gentle wind grooming the crumbling ramparts.");
                     storysent = false;
                     Story02c();
@@ -204,28 +206,30 @@ namespace FireShrine
                 ColorChanger(ConsoleColor.Cyan, "Gain Health and Fullness from eating");
                 Character.currentHealth++;
                 Character.currentHunger++;
-                Program.BeliAdd(new string[] { "Apple" }, new string[] { "It isn't crisp, but it'll do" }, new string[] { "1", "1", }, new string[] { Program.attrilist[8] }, new string[] { "1" }, null);
+                Consumable Apple = new Consumable("Apple", "It isn't crisp, but it'll do", 1, 1, 0);
+                Apple.ToInv();
                 //for edible items the dam range corresponds to lower number hunger, upper number thirst, the health restored or removed refers to dura.
                 Continue(0);
                 Console.WriteLine("As you finish, you hear another sound. Rhythmic. Closer than before. It sounds like footsteps, too massive to belong to a person. The thumping, the only sound in this" +
                     " derelict building, as if it was its old beating heart. It’s coming from the somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
                 storysent = true;
-                Selection = Menues.ChoiceSelection("You know no fear, Attack", "Find a place to hide", null, null, null);
+                string[] choices = { "You know no fear, Attack", "Find a place to hide" };
+                Selection = Menus.ChoiceSelection(choices);
             }
             else
             {
                 Console.WriteLine("As you finish, you hear another sound. Rhythmic. Closer than before. It sounds like footsteps, too massive to belong to a person. The thumping, the only sound in this" +
                    " derelict building, as if it was its old beating heart. It’s coming from the somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
-                Selection = Menues.ChoiceSelection("You know no fear, Attack", "Find a place to hide", null, null, null);
-
+                string[] choices = { "You know no fear, Attack", "Find a place to hide" };
+                Selection = Menus.ChoiceSelection(choices);
             }
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     storysent = false;
                     Story02aa();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     storysent = false;
                     Story02ab();
                     break;
@@ -265,20 +269,22 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
                 storysent = true;
-                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                string[] choices = { "Attack", "Remain Hidden" };
+                Selection = Menus.ChoiceSelection(choices);
             }
             else
             {
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                string[] choices = { "Attack", "Remain Hidden" };
+                Selection = Menus.ChoiceSelection(choices);
             }
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     storysent = false;
                     Story02bba();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     storysent = false;
                     Story02bbb();
                     break;
@@ -303,7 +309,17 @@ namespace FireShrine
                     {
                         Console.WriteLine("Instinctively, you sprint down the stairs toward them.");
                     }
-
+                }
+                foreach (IItems item in Character.Inventory2)
+                {
+                    if ((Type)item == typeof(Blade) | item is Blunt)
+                    {
+                        Console.WriteLine("Instinctively, you sprint down the stairs toward them clutching your {0} close. You may have use for it.", item.Name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Instinctively, you sprint down the stairs toward them.");
+                    }
                 }
                 Continue(0);
                 Console.WriteLine("The bodies are motionless but what is more unsettling is the way they are dressed. " +
@@ -327,7 +343,8 @@ namespace FireShrine
                 Console.WriteLine();
                 Console.WriteLine("Decide.");
                 storysent = true;
-                Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
+                string[] choices = { "Sprint for the gun", "Carefully sneak back to the dinner room." };
+                Selection = Menus.ChoiceSelection(choices);
                 
             }
             else
@@ -337,15 +354,16 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine();
                 Console.WriteLine("Decide.");
-                Selection = Menues.ChoiceSelection("Sprint for the gun", "Carefully sneak back to the dinner room.", null, null, null);
+                string[] choices = { "Sprint for the gun", "Carefully sneak back to the dinner room." };
+                Selection = Menus.ChoiceSelection(choices);
             }
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     storysent = false;
                     Story02ba();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     storysent = false;
                     Story02bb();
                     break;
@@ -413,22 +431,24 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
                 storysent = true;
-                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
+                string[] choices = {"Attack", "Remain Hidden." };
+                Selection = Menus.ChoiceSelection(choices);
+
 
             }
             else
             {
                 Console.WriteLine("It moves closer but is oblivious to you. It moves less carefully before as if no longer stalking, and heads toward the door near you. You could use this opportunity to attack or you could let the beast pass.");
-                Selection = Menues.ChoiceSelection("Attack", "Remain Hidden.", null, null, null);
-
+                string[] choices = { "Attack", "Remain Hidden." };
+                Selection = Menus.ChoiceSelection(choices);
             }
             switch (Selection)
             {
-                case 1:
+                case ConsoleKey.D1:
                     storysent = false;
                     Story02bba();
                     break;
-                case 2:
+                case ConsoleKey.D2:
                     storysent = false;
                     Story02bbb();
                     break;
@@ -506,29 +526,32 @@ namespace FireShrine
                 Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                     " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you." );
                 storysent = true;
-                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
-                
+                string[] choices = { "(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope" };
+                Selection = Menus.ChoiceSelection(choices);
             }
             else
             {
                 Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                      " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you.");
-                Selection = Menues.ChoiceSelection("(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope", null, null);
+                string[] choices = { "(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope" };
+                Selection = Menus.ChoiceSelection(choices);
             }
-            switch (Selection)
+            switch (Selection) //This is an example of a skill check
             {
-                case 1: // intiative check to select this option, otherwise
+                case ConsoleKey.D1: // intiative check to select this option, otherwise
                     if (Character.initiative < 3)
                     {
                         Console.WriteLine("You do not have enough Initiaive to select this option");
-                        Selection = Menues.ChoiceSelection("Hide", "Move toward the rope", null, null, null);
+                        string[] choices = { "Hide", "Move toward the rope" };
+                        Selection = Menus.ChoiceSelection(choices);
+
                         switch (Selection)
                         {
-                            case 1:
+                            case ConsoleKey.D1:
                                 storysent = false;
                                 Story02cb();
                                 break;
-                            case 2:
+                            case ConsoleKey.D2:
                                 storysent = false;
                                 Story02cc();
                                 break;
@@ -543,11 +566,11 @@ namespace FireShrine
 
                     }
 
-                case 2:
+                case ConsoleKey.D2:
                     storysent = false;
                     Story02cb();
                     break;
-                case 3:
+                case ConsoleKey.D3:
                     storysent = false;
                     Story02cc();
                     break;
@@ -555,9 +578,10 @@ namespace FireShrine
                     break;
             }
         }
-        private static void Story02ca()//Trapping
+        public static void Story02ca()//Trapping
         {
             bool Sharpitem = false;
+            string sharpName = "";
             Chapter = "02ca";
             if (storysent == false)
             {
@@ -570,17 +594,17 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("The beast emerges just as you manage to run to the spot by the rope and out of its sight. It stops suddenly and kneels strangely to the ground, using its beady eyes and long ears to find you. It’s clear" +
                     " that smell is not this beast strongest sense but eventually it catches the scent of your shirt. It swiftly moves on top of the table to investigate.");
-                foreach (string[][] item in Character.Inventory)
+                foreach (IEquippable item in Character.Inventory2)
                 {
-                    if (item[3].Contains("Sharp"))
+                    if (item.WeaponType == "Sharp")
                     {
-                        Sharpitem = true;                        
+                        Sharpitem = true;
+                        sharpName = item.Name;
                     }
                 }
                 if (Sharpitem == true)
                 {
-                    string SharpitemName = Program.ItemGetByAttribute("Sharp");
-                    Console.WriteLine($"The beast is in position. You take out your {SharpitemName} and start working on the thick twine. It is harder then you expected and you being to worry that the creature will hear you with its gigantic" +
+                    Console.WriteLine($"The beast is in position. You take out your {sharpName} and start working on the thick twine. It is harder then you expected and you being to worry that the creature will hear you with its gigantic" +
                             " ears and move out of the way. You grab the rope with your free hand for leverage and begin cutting more desperately now, sweat dropping from your brow. Not yet relenting, you sneak a quick glance at the dinner and with" +
                             " a sudden and loud snap, the rope rips from your hands.");
                     Continue(0);

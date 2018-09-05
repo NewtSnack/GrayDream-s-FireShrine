@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FireShrine.exe" size="251344">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FireShrine.exe" size="253416">
       <assemblyIdentity name="FireShrine" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>r2XhUYaxZjh4cCSWGAb/HZuyXiiQ18/4h17oUyLCk+c=</dsig:DigestValue>
+        <dsig:DigestValue>P6P3XsBn9nK52wrx7mQJkShXTqBazD5HCT/ajkL3Hx4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

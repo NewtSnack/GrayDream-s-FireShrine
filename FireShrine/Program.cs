@@ -169,7 +169,6 @@ namespace FireShrine
         {
             while (theChoice == 0)
             {
-
                 Console.WriteLine("(1) {0}", choice1);
                 Console.WriteLine("(2) {0}", choice2);
                 chooseAmount = 2;
@@ -844,6 +843,8 @@ namespace FireShrine
         public static void DevActions()
         {
             Console.WriteLine("Here be the testing envoirnment");
+            string[] choicetable = { "A", "B" };
+            Menus.ChoiceSelection(choicetable);
             Story.Continue(0);
             maxInventory = 4;
             BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);

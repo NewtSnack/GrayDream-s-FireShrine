@@ -16,3 +16,7 @@ C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShri
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\bin\Debug\FireShrine.application
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.exe.manifest
 C:\Users\darrc\Source\Repos\GrayDream-s-FireShrine\FireShrine\obj\Debug\FireShrine.application
+C:\Users\Dar\Source\Repos\GrayDream\FireShrine\bin\Debug\FireShrine.exe.manifest
+C:\Users\Dar\Source\Repos\GrayDream\FireShrine\bin\Debug\FireShrine.application
+C:\Users\Dar\Source\Repos\GrayDream\FireShrine\obj\Debug\FireShrine.exe.manifest
+C:\Users\Dar\Source\Repos\GrayDream\FireShrine\obj\Debug\FireShrine.application
