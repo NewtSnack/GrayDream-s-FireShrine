@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 namespace FireShrine
 {
     public interface IItems
+        //TO DO: Ability to combine items based on attributes to solve puzzles. new item type needed, can't combine weapons or consums
     {
         string Name { get; set; }
         string Description { get; set; }
         void ToInv();
         void Drop();
         void Inspect();
+        //void Combine();
     }
     interface IUsable
     {
@@ -46,8 +48,15 @@ namespace FireShrine
         }
         public void Equip()
         {
-            Console.WriteLine($"{Name} has been Equipped.");
-            Character.equipped = Name;
+            if (Character.equipped == Name)
+            {
+                Unequip();
+            }
+            else
+            {
+                Console.WriteLine($"{Name} has been Equipped.");
+                Character.equipped = Name;
+            }
         }
         public void ToInv()
         {
@@ -62,7 +71,23 @@ namespace FireShrine
 
         public void Inspect()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Name: " + Name);
+            Console.WriteLine(Description);
+            Console.WriteLine("Weapon type: " + WeaponType);
+            if (Attributes != null)
+            {
+                foreach (var item in Attributes)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+            Console.WriteLine("Base Damage: " + Damage);
+            Console.WriteLine("Press E To Equip/Unequip this item.");
+            ConsoleKey Keypress = Console.ReadKey(true).Key;
+            if (Keypress == ConsoleKey.E)
+            {
+                Equip();
+            }
         }
 
         public void Unequip()
@@ -91,8 +116,15 @@ namespace FireShrine
         }
         public void Equip()
         {
-            Console.WriteLine($"{Name} has been Equipped.");
-            Character.equipped = Name;
+            if (Character.equipped == Name)
+            {
+                Unequip();
+            }
+            else
+            {
+                Console.WriteLine($"{Name} has been Equipped.");
+                Character.equipped = Name;
+            }
         }
 
         public void ToInv()
@@ -108,7 +140,20 @@ namespace FireShrine
 
         public void Inspect()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Name: " + Name);
+            Console.WriteLine(Description);
+            Console.WriteLine("Weapon type: " + WeaponType);
+            foreach (var item in Attributes)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Base Damage: " + Damage);
+            Console.WriteLine("Press E To Equip/Unequip this item.");
+            ConsoleKey Keypress = Console.ReadKey(true).Key;
+            if (Keypress == ConsoleKey.E)
+            {
+                Equip();
+            }
         }
 
         public void Unequip()
@@ -152,14 +197,27 @@ namespace FireShrine
 
         public void Inspect()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Name: " + Name);
+            Console.WriteLine(Description);
+            if (HealthRestored != 0)
+            {
+                Console.WriteLine("Health: " + HealthRestored.ToString());
+            }
+            if (HungerValue != 0)
+            {
+                Console.WriteLine("Hunger: " + HungerValue.ToString());
+            }
+            if (ThirstValue != 0)
+            {
+                Console.WriteLine("Thirst: " + ThirstValue.ToString());
+            }
         }
     }
     class Ranged : IItems, IEquippable
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string WeaponType { get; set; } //blade class implies sharp attribute
+        public string WeaponType { get; set; } 
         public string[] Attributes { get; set; }
 
         public int Damage { get; set; }
@@ -172,13 +230,34 @@ namespace FireShrine
 
         public void Equip()
         {
-            Console.WriteLine($"{Name} has been Equipped.");
-            Character.equipped = Name;
+            if (Character.equipped == Name)
+            {
+                Unequip();
+            }
+            else
+            {
+                Console.WriteLine($"{Name} has been Equipped.");
+                Character.equipped = Name;
+            }
         }
 
         public void Inspect()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Name: " + Name);
+            Console.WriteLine(Description);
+            Console.WriteLine("Weapon type: " + WeaponType);
+            foreach (var item in Attributes)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Ammunition Left: " + AmmoCount.ToString());
+            Console.WriteLine("Base Damage: " + Damage);
+            Console.WriteLine("Press E To Equip/Unequip this item.");
+            ConsoleKey Keypress = Console.ReadKey(true).Key;
+            if (Keypress == ConsoleKey.E)
+            {
+                Equip();
+            }
         }
 
         public void ToInv()

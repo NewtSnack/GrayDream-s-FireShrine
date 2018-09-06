@@ -154,7 +154,6 @@ namespace FireShrine
             Console.WriteLine("Armor Rating: {0}", armor);
             Console.WriteLine("Initiative: {0}", initiative);
             //later put dex, str, ini,
-            Story.Continue(0);
         }
 
     }
@@ -843,17 +842,15 @@ namespace FireShrine
         public static void DevActions()
         {
             Console.WriteLine("Here be the testing envoirnment");
+            Blade Knife = new Blade("Dull Knife", "A small rusted carving knife.", 3);
+            Blade Knife2 = new Blade("Worn Knife", "A small rusted carving knife.", 3);
+            Knife2.ToInv();
+            Knife.ToInv();
             string[] choicetable = { "A", "B" };
             Menus.ChoiceSelection(choicetable);
             Story.Continue(0);
             maxInventory = 4;
-            BeliAdd(new string[] { "Wooden Club" }, new string[] { "A piece of furnishing was part of a chair." }, new string[] { "2", "3" }, new string[] { Program.attrilist[1], Program.attrilist[7] }, new string[] { "15" }, null);
-            BeliAdd(new string[] { "Knife" }, new string[] { "A small rusted blade." }, new string[] { "3", "4" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "12" }, null);
-            BeliAdd(new string[] { "God Blade" }, new string[] { "A shining 'S' Word." }, new string[] { "12", "13" }, new string[] { Program.attrilist[1], Program.attrilist[6] }, new string[] { "999" }, null);
-            BeliAdd(new string[] { "M9 Beretta" }, new string[] { "A Semi-automatic Pistol." }, new string[] { "8", "9" }, new string[] { Program.attrilist[2]}, new string[] { "12" }, new string[] { "8" });
-            BeliAdd(new string[] { "Flint-lock Pistol" }, new string[] { "A gunpowder triggered hand cannon." }, new string[] { "7", "7" }, new string[] { Program.attrilist[2] }, new string[] { "12" }, new string[] { "5" });
-
-            Character.equipped = "Knife";
+            Character.equipped = "Dull Knife";
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",

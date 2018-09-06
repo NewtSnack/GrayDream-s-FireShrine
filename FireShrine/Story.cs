@@ -15,6 +15,8 @@ namespace FireShrine
 
         public static void Continue(int speed)
         {
+            Console.WriteLine("...");
+
             if (speed == 0)
             {
                 var keypress = Console.ReadKey(true).Key;
@@ -22,15 +24,10 @@ namespace FireShrine
                 {
                     keypress = Console.ReadKey(true).Key;
                 }
-                Console.WriteLine("...");
-            }
-            else
-            {
-                Console.WriteLine("...");
-            }
+            }            
         }
         
-        public static void JumpToStory() //story broker
+        public static void JumpToStory() //story broker must think of better way to do this
         {
             if (Chapter == "01")
             {
@@ -211,7 +208,7 @@ namespace FireShrine
                 //for edible items the dam range corresponds to lower number hunger, upper number thirst, the health restored or removed refers to dura.
                 Continue(0);
                 Console.WriteLine("As you finish, you hear another sound. Rhythmic. Closer than before. It sounds like footsteps, too massive to belong to a person. The thumping, the only sound in this" +
-                    " derelict building, as if it was its old beating heart. It’s coming from the somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
+                    " derelict building, as if it was its old beating heart. It’s coming from somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
                 storysent = true;
                 string[] choices = { "You know no fear, Attack", "Find a place to hide" };
                 Selection = Menus.ChoiceSelection(choices);
@@ -219,7 +216,7 @@ namespace FireShrine
             else
             {
                 Console.WriteLine("As you finish, you hear another sound. Rhythmic. Closer than before. It sounds like footsteps, too massive to belong to a person. The thumping, the only sound in this" +
-                   " derelict building, as if it was its old beating heart. It’s coming from the somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
+                   " derelict building, as if it was its old beating heart. It’s coming from somewhere off the bottom of the grand staircase at the other end of the room. And it’s coming this way.");
                 string[] choices = { "You know no fear, Attack", "Find a place to hide" };
                 Selection = Menus.ChoiceSelection(choices);
             }
