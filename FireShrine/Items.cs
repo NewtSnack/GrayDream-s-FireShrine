@@ -24,6 +24,7 @@ namespace FireShrine
         string WeaponType { get; set; }
         string[] Attributes { get; set; }
         void Equip();
+        void Unequip();
     }
     class Blade : IItems, IEquippable
     {
@@ -46,8 +47,8 @@ namespace FireShrine
         public void Equip()
         {
             Console.WriteLine($"{Name} has been Equipped.");
+            Character.equipped = Name;
         }
-
         public void ToInv()
         {
             Program.NuAdd(this);
@@ -62,6 +63,12 @@ namespace FireShrine
         public void Inspect()
         {
             throw new NotImplementedException();
+        }
+
+        public void Unequip()
+        {
+            Console.WriteLine($"{Name} has been Unequipped.");
+            Character.equipped = "Fists";
         }
     }
     class Blunt : IItems, IEquippable
@@ -85,6 +92,7 @@ namespace FireShrine
         public void Equip()
         {
             Console.WriteLine($"{Name} has been Equipped.");
+            Character.equipped = Name;
         }
 
         public void ToInv()
@@ -102,8 +110,13 @@ namespace FireShrine
         {
             throw new NotImplementedException();
         }
-    }
 
+        public void Unequip()
+        {
+            Console.WriteLine($"{Name} has been Unequipped.");
+            Character.equipped = "Fists";
+        }
+    }
     class Consumable : IItems, IUsable
     {
         public string Name { get; set; }
@@ -140,6 +153,43 @@ namespace FireShrine
         public void Inspect()
         {
             throw new NotImplementedException();
+        }
+    }
+    class Ranged : IItems, IEquippable
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string WeaponType { get; set; } //blade class implies sharp attribute
+        public string[] Attributes { get; set; }
+
+        public int Damage { get; set; }
+        public int AmmoCount { get; set; }
+
+        public void Drop()
+        {
+            Program.NuDrop(this);
+        }
+
+        public void Equip()
+        {
+            Console.WriteLine($"{Name} has been Equipped.");
+            Character.equipped = Name;
+        }
+
+        public void Inspect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToInv()
+        {
+            Program.NuAdd(this);
+        }
+
+        public void Unequip()
+        {
+            Console.WriteLine($"{Name} has been Unequipped.");
+            Character.equipped = "Fists";
         }
     }
 }
