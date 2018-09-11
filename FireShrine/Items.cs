@@ -25,7 +25,9 @@ namespace FireShrine
         string Name { get; set; }
         string WeaponType { get; set; }
         string[] Attributes { get; set; }
+        int Damage { get; set; }
         void Equip();
+        Acts[] DirtyDeeds { get; set; } // Move list, based on other stats
         void Unequip();
     }
     class Blade : IItems, IEquippable
@@ -35,10 +37,9 @@ namespace FireShrine
         public string Description { get; set; }
         public string WeaponType { get; set; } //blade class implies sharp attribute
         public string[] Attributes { get; set; }
-
+        public Acts[] DirtyDeeds { get; set; }
         public int Damage { get; set; }
-
-
+        
         public Blade(string name = "Sharp Generic", string description = "Bladed", int damage = 1)
         {
             Name = name;
@@ -46,6 +47,11 @@ namespace FireShrine
             Damage = damage;
             WeaponType = "Sharp";            
         }
+        public int Stab()
+        {
+            return Acts.Stab(this);
+        }
+        public int 
         public void Equip()
         {
             if (Character.equipped == Name)
@@ -94,6 +100,11 @@ namespace FireShrine
         {
             Console.WriteLine($"{Name} has been Unequipped.");
             Character.equipped = "Fists";
+        }
+
+        public int BattleActions()
+        {            
+
         }
     }
     class Blunt : IItems, IEquippable

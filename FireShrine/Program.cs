@@ -12,7 +12,7 @@ namespace FireShrine
         public static double vitality = Math.Round((10 + (strength + 2.00) / 5.00));
         public static int armor = 3;
         public static int strength = 5;
-        public static int dexterity = 4;
+        public static int finesse = 4;
         public static int initiative = 3;
         public static int mental = 5;
         public static int MaxSanity = 10;
@@ -130,7 +130,7 @@ namespace FireShrine
                 ConsoleColor currentcolor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("        You are dehydrated");
-                dexterity = -4;
+                finesse = -4;
                 initiative = -1;
                 mental = (mental < 0) ? mental = 0 : mental;
                 Console.ForegroundColor = currentcolor;
@@ -157,305 +157,6 @@ namespace FireShrine
         }
 
     }
-
-    public class Menues
-    //ChoiceSelection -> MenuSelection -> InspectItem
-
-    {
-        static int chooseAmount; //amount of Options asked to player
-        static int theChoice = 0;
-        public static int ChoiceSelection(string choice1, string choice2, string choice3, string choice4, string choice5) //The Method That presents Choices to the player and returns a selection as a 
-        {
-            while (theChoice == 0)
-            {
-                Console.WriteLine("(1) {0}", choice1);
-                Console.WriteLine("(2) {0}", choice2);
-                chooseAmount = 2;
-                if (choice3 != null)
-                {
-                    chooseAmount = 3;
-                    Console.WriteLine("(3) {0}", choice3);
-                    if (choice4 != null)
-                    {
-                        chooseAmount = 4;
-                        Console.WriteLine("(4) {0}", choice4);
-                        if (choice5 != null)
-                        {
-                            chooseAmount = 5;
-                            Console.WriteLine("(5) {0}", choice5);
-                        }
-                    }
-                }
-                var keyPress = Console.ReadKey(true).Key;
-
-                if (chooseAmount == 3)
-                {
-                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
-                    {
-                        keyPress = Console.ReadKey(true).Key;
-                    }
-                }
-                else if (chooseAmount == 4)
-                {
-                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.D4 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
-                    {
-                        keyPress = Console.ReadKey(true).Key;
-                    }
-                }
-                else if (chooseAmount == 5)
-                {
-                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.D3 & keyPress != ConsoleKey.D4 & keyPress != ConsoleKey.D5
-                         & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
-                    {
-                        keyPress = Console.ReadKey(true).Key;
-                    }
-                }
-                else
-                {
-                    while (keyPress != ConsoleKey.D1 & keyPress != ConsoleKey.D2 & keyPress != ConsoleKey.I & keyPress != ConsoleKey.P & keyPress != ConsoleKey.H & keyPress != ConsoleKey.Escape)
-                    {
-                        keyPress = Console.ReadKey(true).Key;
-                    }
-                }
-
-                switch (keyPress)
-                {
-                    case ConsoleKey.D1:
-                        theChoice = 1;
-                        break;
-                    case ConsoleKey.D2:
-                        theChoice = 2;
-                        break;
-                    default:
-                        switch (keyPress)
-                        {
-                            case ConsoleKey.D3:
-                                if (chooseAmount != 0)
-                                {
-                                    theChoice = 3;
-                                }
-                                break;
-                            case ConsoleKey.D4:
-                                if (chooseAmount != 0)
-                                {
-                                    theChoice = 4;
-                                }
-                                break;
-                            case ConsoleKey.D5:
-                                if (chooseAmount != 0)
-                                {
-                                    theChoice = 5;
-                                }
-                                break;
-                            default:
-                                HUD.MenuSelection(keyPress);
-                                break;
-                        }
-
-                        Story.Continue(0);
-                        Console.Clear();
-                        break;
-                        //move jumptostory outside these methods.
-                        //needs to call itself and return a choice
-                }
-                if (theChoice == 0)
-                {
-                    Story.JumpToStory();
-                    break;
-                }
-            }
-            Console.Clear();
-            var returntheChoice = theChoice;
-            theChoice = 0; //reset
-            return returntheChoice;
-        }
-        public static void InspectItem(int inspect)
-        {
-            if (inspect <= 6 & inspect > 0) //may change this to if
-            {
-                //check inventory is not empty before call AND if item index exists
-
-                if (Character.Inventory.Count >= inspect)
-                {
-                    Console.WriteLine("Name:  " + Character.Inventory[inspect - 1][0][0]);
-                    Console.WriteLine(Character.Inventory[inspect - 1][1][0]);
-                    Console.WriteLine("Damage:       " + Character.Inventory[inspect - 1][2][0] + "-" + Character.Inventory[inspect - 1][2][1]);
-                    switch (Character.Inventory[inspect - 1][3].Count())
-                    //Each item can only hold up to three attributes
-                    {
-                        case 1:
-                            Console.WriteLine("Attributes:   " + Character.Inventory[inspect - 1][3][0]);
-                            break;
-                        case 2:
-                            Console.WriteLine("Attributes:   " + Character.Inventory[inspect - 1][3][0] + ", " + Character.Inventory[inspect - 1][3][1]);
-                            break;
-                        case 3:
-                            Console.WriteLine("Attributes:   " + Character.Inventory[inspect - 1][3][0] + ", " + Character.Inventory[inspect - 1][3][1] + ", " + Character.Inventory[inspect - 1][3][2]);
-                            break;
-                        default:
-                            break;
-                    }
-                    if (Character.Inventory[inspect - 1][3].Contains("Ranged Weapon"))
-                    {
-                        Console.WriteLine("Ammunition:   " + Character.Inventory[inspect - 1][5][0] + " Shots Remaining");
-                    }
-                    //show ammo if gun
-                    if (Character.Inventory[inspect - 1][3].Contains("Edible") | Character.Inventory[inspect - 1][3].Contains("Drink"))
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("Press U to Use item");
-                        ConsoleKey keyPress = Console.ReadKey(true).Key;
-
-
-                        if (keyPress == ConsoleKey.U)
-                        {
-                            int healthheal = Int32.Parse(Character.Inventory[inspect - 1][4][0]); //dura
-                            int hungerheal = Int32.Parse(Character.Inventory[inspect - 1][2][0]); //lower dam
-                            int thirstheal = Int32.Parse(Character.Inventory[inspect - 1][2][1]); //upper dam
-
-                            Character.currentHealth = Character.currentHealth + healthheal;
-                            Character.currentHunger = Character.currentHunger + hungerheal;
-                            Character.currentThirst = Character.currentThirst + thirstheal;
-                            Program.BeliDrop(inspect - 1);
-                        }                        
-                    }
-                    else
-                    {
-                        Console.WriteLine("You have no usable items in your inventory.");
-                    }
-                    if (Character.Inventory[inspect - 1][3].Contains("Melee Weapon") | Character.Inventory[inspect - 1][3].Contains("Ranged Weapon"))
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("Press E to Equip item");
-                        ConsoleKey keyPress = Console.ReadKey(true).Key;
-                        if (keyPress == ConsoleKey.E)
-                        {
-                            if (Character.Inventory[inspect - 1][0][0] == Character.equipped)
-                            {
-                                Console.WriteLine($"You unequiped the {Character.equipped}");
-                                Character.equipped = "Fists";
-                                BattleActions.MoveList();
-                            }
-                            else
-                            {
-                                Character.equipped = Character.Inventory[inspect - 1][0][0];
-                                string Attri = Character.Inventory[inspect - 1][3][0];
-                                Console.WriteLine($"Equipped the {Character.Inventory[inspect - 1][0][0]}");
-                                BattleActions.MoveList();
-                            }                            
-                        }
-                    }
-
-
-                }
-                else
-                {
-                    Console.Clear();
-                    HUD.MenuSelection(ConsoleKey.I);
-                }
-            }
-        }
-    }
-    class HUD
-    {
-        public static void MenuSelection(ConsoleKey Selection)
-        {
-            Console.Clear();
-            switch (Selection)
-            {
-                case ConsoleKey.I:
-                    Console.WriteLine("Player Inventory:");
-                    if (Character.Inventory.Count() == 0)
-                    {
-                        Console.WriteLine("You have no items");
-                    }
-                    else
-                    {
-                        int i = 0;
-                        foreach (string[][] element in Character.Inventory)
-                        {
-                            i++;
-                            if (element[0][0] == Character.equipped)
-                            {
-                                Console.Write("(Equipped) ");
-                            }
-                            Console.WriteLine($"{i}: {element[0][0]}");
-                        }
-                        Console.WriteLine("      Input the item number to inspect/use...,");
-                        Console.WriteLine("      Press D To Drop an Item.");
-                        Console.WriteLine("      Press 0 To Leave Menus");
-
-                        ConsoleKey keypress = Console.ReadKey(true).Key;
-                        //must choose number 0 - 6 or (D)rop, Us(E) add more to while for more inv space
-
-                        while (keypress != ConsoleKey.D0 & keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress
-                            != ConsoleKey.D3 & keypress != ConsoleKey.D4 & keypress != ConsoleKey.D5 & keypress != ConsoleKey.D6 & keypress != ConsoleKey.D)
-                        {
-                            keypress = Console.ReadKey(true).Key;
-                        }
-                        //INSPECT 1 - 6
-                        int keypressint = (int)keypress;
-                        while (keypress != ConsoleKey.D & keypress != ConsoleKey.D0)
-                        {
-                            Menues.InspectItem(keypressint - 48);
-                            Console.ReadKey();
-                            HUD.MenuSelection(ConsoleKey.I);
-                            break;
-                        }
-                        //DROP D
-                        if (keypress == ConsoleKey.D)
-                        {
-                            Console.WriteLine("Select the item number to drop it.");
-                            keypress = Console.ReadKey(true).Key;
-
-                            while (keypress != ConsoleKey.D1 & keypress != ConsoleKey.D2 & keypress
-                            != ConsoleKey.D3 & keypress != ConsoleKey.D4 & keypress != ConsoleKey.D5 & keypress != ConsoleKey.D6)
-                            {
-                                //Drop item 1-6
-                                keypress = Console.ReadKey(true).Key;
-                            }
-                            int keyPressDropInt = (int)keypress - 48; //returns int 0-5
-                            if (keyPressDropInt > 0 & keyPressDropInt <= Character.Inventory.Count()) //reject negatives and numbers larger than max inv
-                            {
-                                Console.WriteLine();
-                                Console.WriteLine("                  Are you sure?   Y to Drop, N to Cancel");
-                                var confirm = Console.ReadKey(true).Key;
-                                while (confirm != ConsoleKey.Y & confirm != ConsoleKey.N)
-                                {
-                                    confirm = Console.ReadKey(true).Key;
-                                }
-                                if (confirm == ConsoleKey.Y)
-                                {
-                                    Program.BeliDrop(keyPressDropInt - 1);
-                                }
-                            }
-                            break;
-                        }
-                        //CANCEL
-                        if (keypress == ConsoleKey.D0)
-                        {
-                            break;
-                        }
-                    }
-                    break;
-                case ConsoleKey.P:
-                    Console.WriteLine("Player Stats");
-                    Character.DisplayStats();
-                    break;
-                case ConsoleKey.H:
-                    Console.WriteLine("Press I for (I)nventory, Press P for (P)layer Stats, Press Escape to Return");
-                    MenuSelection((Console.ReadKey(true)).Key);
-                    break;
-                case ConsoleKey.Escape:
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
-    }
-
     public class BattleActions
     {
         //BattleAction States/Buffs
@@ -636,7 +337,7 @@ namespace FireShrine
             }
             int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
             int damageDealt = weapondmg;
-            int roll = diceroll.Next(0, 5) + Character.dexterity / 2; //chancetohit
+            int roll = diceroll.Next(0, 5) + Character.finesse / 2; //chancetohit
             Console.WriteLine("You pull the trigger...");
             if (roll < 2)
             {
@@ -661,8 +362,8 @@ namespace FireShrine
             double weapondmg2 = Damvaluehigh * .7;
             Console.WriteLine("Deftly, you let loose two controlled shots!");
 
-            int roll1 = diceroll.Next(0, 10) + (Character.dexterity / 3);
-            int roll2 = diceroll.Next(0, 10) + (Character.dexterity / 3);
+            int roll1 = diceroll.Next(0, 10) + (Character.finesse / 3);
+            int roll2 = diceroll.Next(0, 10) + (Character.finesse / 3);
             if (roll1 < 3 )
             {
                 Console.WriteLine("The first shot missed!");
@@ -692,7 +393,7 @@ namespace FireShrine
         //Monk
         public static int Punch()
         {
-            int damageDealt = diceroll.Next(Character.dexterity - 2, Character.dexterity);
+            int damageDealt = diceroll.Next(Character.finesse - 2, Character.finesse);
             Console.WriteLine("You find an oppertunity to strike!");
             Story.Continue(0);
 
@@ -907,7 +608,7 @@ namespace FireShrine
                         FinalDamage = BattleActions.ActstoActions(Character.battleActs[2]);
                         break;
                     default:
-                        HUD.MenuSelection(keypress);
+                        Menus.MenuSelection(keypress);
                         continue;                        
 
                 }
@@ -966,7 +667,7 @@ namespace FireShrine
                 }
                 if (BattleActions.isAiming)
                 {
-                    Character.dexterity = Character.dexterity + 5;
+                    Character.finesse = Character.finesse + 5;
                     skillstateA = turncounter;
                 }
 
@@ -982,7 +683,7 @@ namespace FireShrine
                 }
                 if (turncounter - skillstateA == 2)
                 {
-                    Character.dexterity = Character.dexterity - 5;
+                    Character.finesse = Character.finesse - 5;
                     BattleActions.isAiming = false;
                 }
                 if (turncounter - skillstateP == 1)
@@ -998,7 +699,7 @@ namespace FireShrine
                     if (BattleActions.isParrying == true)
                     {
                         Console.WriteLine("You manage to return some damage.");
-                        int parryDamage = Character.dexterity - 2 + diceroll.Next(0,1);
+                        int parryDamage = Character.finesse - 2 + diceroll.Next(0,1);
                         Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
                         Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
                     }
