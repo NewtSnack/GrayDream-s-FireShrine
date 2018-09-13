@@ -20,7 +20,9 @@ namespace FireShrine
         public static string HpFraction { get { return (currentHealth.ToString() + "/" + vitality.ToString()); } }
         public static string MindFraction { get { return (mental.ToString() + "/" + MaxSanity.ToString()); } }
         public static float hpfractionActual { get { return (currentHealth / (float)vitality); } }
-        
+        public static IItems EquippedItem { get; set; } //The Item Currently Equipped
+
+
         public static List<string[][]> Inventory = new List<string[][]>();
         public static List<IItems> Inventory2 = new List<IItems>();
         public static string equipped = "Fists";

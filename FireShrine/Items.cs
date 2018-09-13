@@ -22,12 +22,13 @@ namespace FireShrine
     }
     interface IEquippable
     {
+        //TRY GENERAL ATTACK NAMES FOR ALL IEQUIPPABLES ATTACK1 ATTACK2 ATTACK3 AND EACH IS DIFFERENT DEPENDENT ON ITEM TYPE. THEN EquippedItem.ATTACK1()
         string Name { get; set; }
         string WeaponType { get; set; }
         string[] Attributes { get; set; }
+        string[] BattleActs { get; set; }
         int Damage { get; set; }
         void Equip();
-        Acts[] DirtyDeeds { get; set; } // Move list, based on other stats
         void Unequip();
     }
     class Blade : IItems, IEquippable
@@ -37,21 +38,25 @@ namespace FireShrine
         public string Description { get; set; }
         public string WeaponType { get; set; } //blade class implies sharp attribute
         public string[] Attributes { get; set; }
-        public Acts[] DirtyDeeds { get; set; }
         public int Damage { get; set; }
-        
+        string[] BattleActs { get; set; }
+
         public Blade(string name = "Sharp Generic", string description = "Bladed", int damage = 1)
         {
             Name = name;
             Description = description;
             Damage = damage;
-            WeaponType = "Sharp";            
+            WeaponType = "Sharp";
+            BattleActs = new string[] {"Stab","Slash","Parry" };
         }
         public int Stab()
         {
             return Acts.Stab(this);
         }
-        public int 
+        public int Slash()
+        {
+            return Acts.Slash(this);
+        }
         public void Equip()
         {
             if (Character.equipped == Name)
@@ -100,6 +105,7 @@ namespace FireShrine
         {
             Console.WriteLine($"{Name} has been Unequipped.");
             Character.equipped = "Fists";
+            Character.Unarmbool = true;
         }
 
         public int BattleActions()
@@ -112,7 +118,7 @@ namespace FireShrine
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public string WeaponType { get; set; } //blade class implies sharp attribute
+        public string WeaponType { get; set; } 
         public string[] Attributes { get; set; }
 
         public int Damage { get; set; }

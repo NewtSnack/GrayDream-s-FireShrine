@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace FireShrine
 {
     //the call would then be Knife.Stab() which is not modular
+    //function must have nothing to do with IEquippable
+    //Attack method that chooses attack from IEquippable attack list
     class Acts
     {
         //Status Getters Setters
