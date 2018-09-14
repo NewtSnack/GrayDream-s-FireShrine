@@ -20,7 +20,7 @@ namespace FireShrine
     {
         void Use();
     }
-    interface IEquippable
+    public interface IEquippable
     {
         //TRY GENERAL ATTACK NAMES FOR ALL IEQUIPPABLES ATTACK1 ATTACK2 ATTACK3 AND EACH IS DIFFERENT DEPENDENT ON ITEM TYPE. THEN EquippedItem.ATTACK1()
         string Name { get; set; }
@@ -28,6 +28,9 @@ namespace FireShrine
         string[] Attributes { get; set; }
         string[] BattleActs { get; set; }
         int Damage { get; set; }
+        int Attack1();
+        int Attack2();
+        int Attack3();
         void Equip();
         void Unequip();
     }
@@ -39,7 +42,7 @@ namespace FireShrine
         public string WeaponType { get; set; } //blade class implies sharp attribute
         public string[] Attributes { get; set; }
         public int Damage { get; set; }
-        string[] BattleActs { get; set; }
+        public string[] BattleActs { get; set; }
 
         public Blade(string name = "Sharp Generic", string description = "Bladed", int damage = 1)
         {
@@ -49,13 +52,17 @@ namespace FireShrine
             WeaponType = "Sharp";
             BattleActs = new string[] {"Stab","Slash","Parry" };
         }
-        public int Stab()
+        public int Attack1()
         {
             return Acts.Stab(this);
         }
-        public int Slash()
+        public int Attack2()
         {
             return Acts.Slash(this);
+        }
+        public int Attack3()
+        {
+            return Acts.Parry();
         }
         public void Equip()
         {
@@ -105,13 +112,8 @@ namespace FireShrine
         {
             Console.WriteLine($"{Name} has been Unequipped.");
             Character.equipped = "Fists";
-            Character.Unarmbool = true;
         }
-
-        public int BattleActions()
-        {            
-
-        }
+        
     }
     class Blunt : IItems, IEquippable
     {
@@ -120,7 +122,7 @@ namespace FireShrine
         public string Description { get; set; }
         public string WeaponType { get; set; } 
         public string[] Attributes { get; set; }
-
+        public string[] BattleActs { get; set; }
         public int Damage { get; set; }
 
 
@@ -130,6 +132,19 @@ namespace FireShrine
             Description = description;
             Damage = damage;
             WeaponType = "Blunt";
+            BattleActs = new string[] {"Swing","Smash","Guard" };
+        }
+        public int Attack1()
+        {
+            return Acts.Swing(this);
+        }
+        public int Attack2()
+        {
+            return Acts.Smash(this);
+        }
+        public int Attack3()
+        {
+            return Acts.Guard();
         }
         public void Equip()
         {

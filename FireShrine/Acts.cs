@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace FireShrine
 {
@@ -47,36 +47,37 @@ namespace FireShrine
             //deal dmg if attacked next turn
         }
         //Blunt
-        public static int Swing()
+        public static int Swing(IEquippable Weapon)
         {
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg + diceroll.Next(Character.strength - 3, Character.strength);
+            int weapondam = diceroll.Next(0, 2) + Weapon.Damage;
+            int Damage = diceroll.Next(Character.strength - 3, Character.strength);      
             Console.WriteLine($"You swing the {Character.equipped} in a wide arc.");
             Story.Continue(0);
-            return damageDealt;
+            return Damage;
         }
-        public static int Smash()
+        public static int Smash(IEquippable Weapon)
         {
-            isShattering = true;
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg + diceroll.Next(Character.strength - 2, Character.strength);
+            IsShattering = true;
+            int weapondam = diceroll.Next(3, 4) + Weapon.Damage;
+            int Damage = weapondam + diceroll.Next(Character.strength - 2, Character.strength);
             Console.WriteLine($"You raise the {Character.equipped} high above your head.");
+            Thread.Sleep(1000); Console.Write(". "); Thread.Sleep(1000); Console.Write(". "); Thread.Sleep(1000); Console.Write(". ");
             int roll = diceroll.Next(100);
-            if (roll < 30) //30% chance to miss
+            if (roll < 40) //40% chance to miss
             {
                 Console.WriteLine($"The enemy dodges and the {Character.equipped} smashes into the ground.");
-                damageDealt = 0;
+                Damage = 0;
             }
             Story.Continue(0);
 
-            return damageDealt;
+            return Damage;
 
         }
 
-        public static int Block()
+        public static int Guard()
         {
             Console.WriteLine("You bolster your defense");
-            isGuarding = true;
+            IsGuarding = true;
             Story.Continue(0);
 
             return 0;
@@ -84,15 +85,15 @@ namespace FireShrine
         //Ranged
         public static int Draw_A_Bead()
         {
-            isAiming = true;
+            IsAiming = true;
             Console.WriteLine($"You line up the enemy in your sights. Chance to hit increased!");
             Story.Continue(0);
             return 0;
 
         }
-        public static int Shoot()
+        public static int Shoot(Ranged Weapon)
         {
-            if (bulletsleft <= 0)
+            if (Weapon.AmmoCount <= 0)
             {
                 Console.WriteLine("You are out of ammo!");
                 Story.Continue(0);
