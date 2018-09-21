@@ -42,6 +42,8 @@ namespace FireShrine
 
                 }
             }
+            keytoint = 0;
+            Console.WriteLine();
             return keyPress.Key;
         }
         public static void MenuSelection(ConsoleKey Selection)
@@ -55,6 +57,8 @@ namespace FireShrine
                     if (Character.Inventory2.Count() == 0)
                     {
                         Console.WriteLine("You have no items");
+                        Console.ReadKey(true);
+                        invAccessed = false;
                     }
                     else
                     {
@@ -62,11 +66,11 @@ namespace FireShrine
                         foreach (IItems element in Character.Inventory2)
                         {
                             i++;
-                            if (element.Name == Character.equipped)
+                            if (element.Name == Character.Equipped.Name)
                             {
                                 Console.Write("(Equipped) ");
                             }
-                            Console.WriteLine($"{i}: {element.Name}");
+                            Console.WriteLine($"{i}: {element.Name}"); 
                         }
                         Console.WriteLine("      Input the item number to inspect/use...,");
                         Console.WriteLine("      Press D To Drop an Item.");
@@ -158,7 +162,12 @@ namespace FireShrine
             else
             {
                 //jump to chapter:
-                ChoiceSelection(Choiceref);
+                //ChoiceSelection(Choiceref);
+                if (Program.isInBattle == false)
+                {
+                    Story.JumpToStory();
+
+                }
             }
         }
 

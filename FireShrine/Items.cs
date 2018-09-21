@@ -66,15 +66,16 @@ namespace FireShrine
         }
         public void Equip()
         {
-            if (Character.equipped == Name)
+            if (Character.Equipped.Name == Name)
             {
                 Unequip();
             }
             else
             {
                 Console.WriteLine($"{Name} has been Equipped.");
-                Character.equipped = Name;
+                Character.Equipped = this;
             }
+            
         }
         public void ToInv()
         {
@@ -111,7 +112,7 @@ namespace FireShrine
         public void Unequip()
         {
             Console.WriteLine($"{Name} has been Unequipped.");
-            Character.equipped = "Fists";
+            Character.Equipped = Character.Hands;
         }
         
     }
@@ -148,14 +149,14 @@ namespace FireShrine
         }
         public void Equip()
         {
-            if (Character.equipped == Name)
+            if (Character.Equipped.Name == Name)
             {
                 Unequip();
             }
             else
             {
                 Console.WriteLine($"{Name} has been Equipped.");
-                Character.equipped = Name;
+                Character.Equipped = this;
             }
         }
 
@@ -191,7 +192,7 @@ namespace FireShrine
         public void Unequip()
         {
             Console.WriteLine($"{Name} has been Unequipped.");
-            Character.equipped = "Fists";
+            Character.Equipped = Character.Hands;
         }
     }
     class Consumable : IItems, IUsable
@@ -254,6 +255,30 @@ namespace FireShrine
 
         public int Damage { get; set; }
         public int AmmoCount { get; set; }
+        public string[] BattleActs { get; set; }
+        public Ranged(string name = "Ranged Generic", string description = "Gun", int damage = 1, int ammo = 5)
+        {
+            Name = name;
+            Description = description;
+            Damage = damage;
+            WeaponType = "Ranged Weapon";
+            AmmoCount = ammo;
+            BattleActs = new string[] { "Shoot", "Draw A Bead", "DoubleTap" };
+        }
+        public int Attack1()
+        {
+            return Acts.Shoot(this);
+        }
+
+        public int Attack2()
+        {
+            return Acts.Draw_A_Bead();
+        }
+
+        public int Attack3()
+        {
+            return Acts.DoubleTap(this);
+        }
 
         public void Drop()
         {
@@ -262,14 +287,14 @@ namespace FireShrine
 
         public void Equip()
         {
-            if (Character.equipped == Name)
+            if (Character.Equipped.Name == Name)
             {
                 Unequip();
             }
             else
             {
                 Console.WriteLine($"{Name} has been Equipped.");
-                Character.equipped = Name;
+                Character.Equipped = this;
             }
         }
 
@@ -300,7 +325,50 @@ namespace FireShrine
         public void Unequip()
         {
             Console.WriteLine($"{Name} has been Unequipped.");
-            Character.equipped = "Fists";
+            Character.Equipped = Character.Hands;
+        }
+    }
+    public class Unarmed : IEquippable
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string WeaponType { get; set; }
+        public string[] Attributes { get; set; }
+        public int Damage { get; set; }
+        public string[] BattleActs { get; set; }
+        public Unarmed(string name = "Fists")
+        {
+            Name = "Fists";
+            Description = "Martial Arts";
+            WeaponType = "Martial";
+            Attributes = new string[] { };
+            Damage = (int)(2 + Character.strength * 1.25);
+            BattleActs = new string[] {"Punch","Grab","Parry" };
+        }           
+
+        public int Attack1()
+        {
+            return Acts.Punch(this);
+        }
+
+        public int Attack2()
+        {
+            return Acts.Grab(this);
+        }
+
+        public int Attack3()
+        {
+            return Acts.Parry();
+        }
+
+        public void Equip()
+        {
+            Character.Equipped = this;
+        }
+
+        public void Unequip()
+        {
+            throw new NotImplementedException();
         }
     }
 }

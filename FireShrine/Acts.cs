@@ -21,15 +21,15 @@ namespace FireShrine
         public static Random diceroll = new Random();
 
         //Blade
-        public static int Stab(IEquippable Weapon)
+        public static int Stab(Blade Weapon)
         {
             int weapondam = diceroll.Next(-2,2) + Weapon.Damage;
             int Damage = weapondam + diceroll.Next(0, Character.strength / 2);
-            Console.WriteLine($"You rush foward to plunge the {Character.equipped} into the enemy.");
+            Console.WriteLine($"You rush foward to plunge the {Character.Equipped.Name} into the enemy.");
             Story.Continue(0);
             return Damage;
         }
-        public static int Slash(IEquippable Weapon)
+        public static int Slash(Blade Weapon)
         {
             IsQuick = true;
             int weapondam = diceroll.Next(-1,1) + Weapon.Damage;
@@ -47,25 +47,25 @@ namespace FireShrine
             //deal dmg if attacked next turn
         }
         //Blunt
-        public static int Swing(IEquippable Weapon)
+        public static int Swing(Blunt Weapon)
         {
             int weapondam = diceroll.Next(0, 2) + Weapon.Damage;
             int Damage = diceroll.Next(Character.strength - 3, Character.strength);      
-            Console.WriteLine($"You swing the {Character.equipped} in a wide arc.");
+            Console.WriteLine($"You swing the {Character.Equipped.Name} in a wide arc.");
             Story.Continue(0);
             return Damage;
         }
-        public static int Smash(IEquippable Weapon)
+        public static int Smash(Blunt Weapon)
         {
             IsShattering = true;
             int weapondam = diceroll.Next(3, 4) + Weapon.Damage;
             int Damage = weapondam + diceroll.Next(Character.strength - 2, Character.strength);
-            Console.WriteLine($"You raise the {Character.equipped} high above your head.");
+            Console.WriteLine($"You raise the {Character.Equipped.Name} high above your head.");
             Thread.Sleep(1000); Console.Write(". "); Thread.Sleep(1000); Console.Write(". "); Thread.Sleep(1000); Console.Write(". ");
             int roll = diceroll.Next(100);
             if (roll < 40) //40% chance to miss
             {
-                Console.WriteLine($"The enemy dodges and the {Character.equipped} smashes into the ground.");
+                Console.WriteLine($"The enemy dodges and the {Character.Equipped.Name} smashes into the ground.");
                 Damage = 0;
             }
             Story.Continue(0);
@@ -89,7 +89,6 @@ namespace FireShrine
             Console.WriteLine($"You line up the enemy in your sights. Chance to hit increased!");
             Story.Continue(0);
             return 0;
-
         }
         public static int Shoot(Ranged Weapon)
         {
@@ -99,63 +98,64 @@ namespace FireShrine
                 Story.Continue(0);
                 return 0;
             }
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg;
+            int weapondam = diceroll.Next(Weapon.Damage -2, Weapon.Damage + 1);
+            int Damage = weapondam;
             int roll = diceroll.Next(0, 5) + Character.finesse / 2; //chancetohit
             Console.WriteLine("You pull the trigger...");
             if (roll < 2)
             {
-                damageDealt = 0;
+                Console.WriteLine("The shot missed it's mark...");
+                Damage = 0;
             }
-            bulletsleft--;
-            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
+            Weapon.AmmoCount--;
             Story.Continue(0);
-            return damageDealt;
+            return Damage;
         }
-        public static int DoubleTap()
+        public static int DoubleTap(Ranged Weapon)
         {
-            if (bulletsleft <= 0)
+            if (Weapon.AmmoCount <= 0)
             {
-                isQuick = true;
+                IsQuick = true;
                 Console.WriteLine("You are out of ammo!");
                 Story.Continue(0);
                 return 0;
             }
+            if (Weapon.AmmoCount == 1)
+            {
+                Console.WriteLine("You only have one round in the chamber!");
+                Story.Continue(0);
+                Shoot(Weapon);
+            }
             //chance to do dmg twice,
-            double weapondmg1 = Damvaluehigh * .6;
-            double weapondmg2 = Damvaluehigh * .7;
+            double weapondam1 = Weapon.Damage * .6;
+            double weapondam2 = Weapon.Damage * .7;
             Console.WriteLine("Deftly, you let loose two controlled shots!");
 
-            int roll1 = diceroll.Next(0, 10) + (Character.finesse / 3);
-            int roll2 = diceroll.Next(0, 10) + (Character.finesse / 3);
-            if (roll1 < 3)
+            int roll1 = diceroll.Next(0, 17) + (Character.finesse / 3);
+            int roll2 = diceroll.Next(0, 17) + (Character.finesse / 3);
+            if (roll1 < 8)
             {
                 Console.WriteLine("The first shot missed!");
-                weapondmg1 = 0;
-                bulletsleft--;
+                weapondam1 = 0;
+                Weapon.AmmoCount--;
 
+            }          
+            if (roll2 < 5)
+            {
+                Console.WriteLine("The second shot missed!");
+                weapondam2 = 0;
+                Weapon.AmmoCount--;
             }
-            if (bulletsleft <= 0)
+            int damageDealt = (int)(weapondam1 + weapondam2);
+            if (Weapon.AmmoCount <= 0)
             {
                 Console.WriteLine("You are out of ammo!");
             }
-            else
-            {
-                if (roll2 < 2)
-                {
-                    Console.WriteLine("The second shot missed!");
-                    weapondmg2 = 0;
-                }
-            }
-
-            int damageDealt = (int)(weapondmg1 + weapondmg2);
-            bulletsleft--;
-            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
             Story.Continue(0);
             return damageDealt;
         }
         //Monk
-        public static int Punch()
+        public static int Punch(Unarmed Martial)
         {
             int damageDealt = diceroll.Next(Character.finesse - 2, Character.finesse);
             Console.WriteLine("You find an oppertunity to strike!");
@@ -163,7 +163,7 @@ namespace FireShrine
 
             return damageDealt;
         }
-        public static int Grab()
+        public static int Grab(Unarmed Martial)
         {
             int damageDealt = diceroll.Next(Character.strength - 2, Character.strength);
             Console.WriteLine("You manage to strangle and slam the enemy!");

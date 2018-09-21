@@ -10,7 +10,7 @@ namespace FireShrine
     class Story
     {
         static bool storysent = false;
-        static ConsoleKey Selection;
+        static ConsoleKey Selection { get; set; }
         public static string Chapter;
 
         public static void Continue(int speed)
@@ -237,16 +237,14 @@ namespace FireShrine
         public static void Story02aa()
         {
             Chapter = "02aa";
-            Console.WriteLine($"You decide it’s best to face whatever is coming head on. With your {Character.equipped} ready, you sprint toward the head of the stairs. Right as you near the top, a large furry bat-like creature" +
+            Console.WriteLine($"You decide it’s best to face whatever is coming head on. With your {Character.Equipped.Name} ready, you sprint toward the head of the stairs. Right as you near the top, a large furry bat-like creature" +
                 $" sees you and lets out a horrifying screech. You do not break stride as you courageously leap to strike the creature.");
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",
                 movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" }
             };
-
             Program.isInBattle = true;
-            BattleActions.MoveList();
             Program.Battle(ManBat);
 
         }
@@ -295,18 +293,7 @@ namespace FireShrine
 
             if (storysent == false)
             {
-                Continue(0);
-                foreach (string[][] item in Character.Inventory) //Check For a "Weapon Attribute" 
-                {
-                    if (Array.IndexOf(item[3], "Melee Weapon") >= 0 | Array.IndexOf(item[3], "Ranged Weapon") >= 0)
-                    {
-                        Console.WriteLine("Instinctively, you sprint down the stairs toward them clutching your {0} close. You may have use for it.", item[0][0]);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Instinctively, you sprint down the stairs toward them.");
-                    }
-                }
+                Continue(0);                
                 foreach (IItems item in Character.Inventory2)
                 {
                     if ((Type)item == typeof(Blade) | item is Blunt)
@@ -393,11 +380,13 @@ namespace FireShrine
                 Continue(0);
                 Console.WriteLine("Another guttural screech as phlegm and salvia expels from between razor sharp teeth, and it charges. ");
                 Continue(0);
-                ColorChanger(ConsoleColor.Red, "You've suffered 2 damage");
+                ColorChanger(ConsoleColor.Red, "You've suffered 4 damage");
                 ColorChanger(ConsoleColor.Green, "The monster has suffered 3 damage.");
 
-                Character.currentHealth = Character.currentHealth - 2;
-                Program.BeliAdd(new string[] { "M9 Beretta" }, new string[] { "A Semi-automatic Pistol." }, new string[] { "8", "9" }, new string[] { Program.attrilist[2] }, new string[] { "12" }, new string[] { "8" });
+                Character.currentHealth = Character.currentHealth - 4;
+                Ranged m9Pistol = new Ranged("M9 Berretta", "A Semi-automatic Pistol.", 8, 5);
+                m9Pistol.ToInv();
+                m9Pistol.Equip();
                 Entities ManBat = new Entities
                 {
                     Name = "Grotesque Bat",
@@ -406,7 +395,6 @@ namespace FireShrine
                 };
 
                 Program.isInBattle = true;
-                BattleActions.MoveList();
                 Program.Battle(ManBat);
             }
         }
@@ -455,19 +443,19 @@ namespace FireShrine
         }
         public static void Story02bba()
         {
-            Console.WriteLine($"Deftly, you emerge from your concealment with your {Character.equipped} at the ready. You are close enough to smell the reek of this foul creature and see the dark hairs close to its leathery skin.");
+            Console.WriteLine($"Deftly, you emerge from your concealment with your {Character.Equipped.Name} at the ready. You are close enough to smell the reek of this foul creature and see the dark hairs close to its leathery skin.");
             Continue(0);
 
-            if (Character.equipped == "Knife") //later do an attribute check on equipped item. 
+            if (Character.Equipped.WeaponType == "Sharp")
             {
                 Console.WriteLine("Carefully you close the distance and as soon as you are in range you stab the blade deep into the creature’s back. The beast let’s out an earsplitting screech spins and swings wildly narrowly missing your head. You manage to pull your weapon free and watch as its blood paints the floor. You hit something important. ");
             }
-            if (Character.equipped == "Wooden Club")
+            if (Character.Equipped.WeaponType == "Blunt")
             {
                 Console.WriteLine("Carefully you close the distance and as soon as you are in range you bludgeon the back of the creature’s skull and the beast stumbles forward briefly disoriented and its claws cleave through the air inches from your face. It lets out a screech that you feel in your bones.");
 
             }
-            if (Character.equipped == "Fists")
+            if (Character.Equipped.WeaponType == "Martial")
             {
                 Console.WriteLine("Carefully you close the distance and as soon as you are in range you jump and attempt to strangle the creature in a headlock. The monster immediately flails its arms and the stranglehold becomes an " +
                     "effort to not be violently tossed from its back. It crashes dangerously into jagged debris in an effort to drop you but only succeeds in damaging itself. You notice its claws are about to reach you as you brace" +
@@ -485,7 +473,6 @@ namespace FireShrine
             };
 
             Program.isInBattle = true;
-            BattleActions.MoveList();
             Program.Battle(ManBat);
         }
         public static void Story02bbb()
@@ -628,7 +615,6 @@ namespace FireShrine
                     };
 
                     Program.isInBattle = true;
-                    BattleActions.MoveList();
                     Program.Battle(ManBat);
                     Character.initiative = Character.initiative + 1;
                 }
@@ -646,25 +632,27 @@ namespace FireShrine
         }
         private static void Story02cc() //Rope non Initiative
         {
+            //NEED to add logic if user has neither blunt nor sharp
             Chapter = "02cc";
-            bool Sharpitem = false;
+            bool Sharpbool = false;
+            IEquippable sharpitem = null;
 
             if (storysent == false)
             {
 
                 Console.WriteLine("You prepare to untie the rope as the creature walks into view. But without proper bait there is nothing keeping the creature drawn to the center of the room.");
                 storysent = true;
-                foreach (string[][] item in Character.Inventory)
+                foreach (IEquippable item in Character.Inventory2)
                 {
-                    if (item[3].Contains("Sharp"))
+                    if (item.WeaponType == "Sharp")
                     {
-                        Sharpitem = true;
+                        Sharpbool = true;
+                        sharpitem = item;
                     }
                 }
-                if (Sharpitem == true)
+                if (Sharpbool == true)
                 {
-                    string SharpitemName = Program.ItemGetByAttribute("Sharp");
-                    Console.WriteLine($"The beast is as close to the damage zone as you think it'll ever be. You take out your {SharpitemName} and start working on the thick twine. It is harder then you expected and you being to worry that the creature will hear you with its gigantic" +
+                    Console.WriteLine($"The beast is as close to the damage zone as you think it'll ever be. You take out your {sharpitem.Name} and start working on the thick twine. It is harder then you expected and you being to worry that the creature will hear you with its gigantic" +
                             " ears and move out of the way. You grab the rope with your free hand for leverage and begin cutting more desperately now, sweat dropping from your brow. Not yet relenting, you sneak a quick glance at the dinner and with" +
                             " a sudden and loud snap, the rope rips from your hands.");
                     Continue(0);
@@ -682,12 +670,18 @@ namespace FireShrine
                     };
 
                     Program.isInBattle = true;
-                    BattleActions.MoveList();
                     Program.Battle(ManBat);
                 }
                 else
                 {
-                    string BluntitemName = Program.ItemGetByAttribute("Blunt");
+                    string BluntitemName = "";
+                    foreach (IEquippable item in Character.Inventory2)
+                    {
+                        if (item.WeaponType == "Blunt")
+                        {
+                            BluntitemName = item.Name;
+                        }
+                    }
                     Console.WriteLine("The beast is as close to the damage zone as you think it'll ever be. You began to work on untying the rope, it would be easier if you had something sharp to work with. It’s attached to a metal bar jutting from the wall in well-tied knots. You begin to worry that the" +
                         " creature will hear you with its gigantic ears and move out of the way. Your hands begin to ache and skin beings to peel as you use all your strength to undo the thick twine knots.");
                     Continue(0);
@@ -707,7 +701,6 @@ namespace FireShrine
                     };
 
                     Program.isInBattle = true;
-                    BattleActions.MoveList();
                     Program.Battle(ManBat);
                 }
                 storysent = true;

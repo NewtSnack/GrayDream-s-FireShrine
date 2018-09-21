@@ -14,11 +14,11 @@ namespace FireShrine
         public int DodgeRating = 2;
         public string[] movelist = new string[] { "Attack1", "Attack2" };
         public int BaseDamage = 3;
-
-        public bool isFlying = false;
-        public bool isDodgeing = false;
-        public bool isBulwarked = false;
-        public bool isOverwhelming = false;
+        //status getters setters
+        public bool IsFlying { get; set; }
+        public bool IsDodgeing { get; set; }
+        public bool IsBulwarked { get; set; }
+        public bool IsOverwhelming { get; set; }
     }
     public class AttackList
     {
@@ -26,7 +26,7 @@ namespace FireShrine
         {
             Console.WriteLine($"{Enemy.Name} Uses Bulwark!");
             Story.Continue(0);
-            Enemy.isBulwarked = true;
+            Enemy.IsBulwarked = true;
             Enemy.Defense = Enemy.Defense + 3;
             Console.WriteLine($"{Enemy.Name} increases its defense!");
         }
@@ -35,8 +35,8 @@ namespace FireShrine
             Console.WriteLine($"{Enemy.Name} Uses Bite!");
             Story.Continue(0);
             Random _rand = new Random();//dmgs
-            int modifier = _rand.Next(-1, 2);
-            var damageDealt = Enemy.BaseDamage + modifier - Character.armor;
+            int modifier = _rand.Next(1, 2);
+            var damageDealt = Enemy.BaseDamage + modifier - Character.armor / 2;
             if (damageDealt < 0)
             {
                 damageDealt = 0;
@@ -55,7 +55,7 @@ namespace FireShrine
         {
             Console.WriteLine($"{Enemy.Name} Begins the Hunt!");
             Story.Continue(0);
-            Enemy.isDodgeing = true;
+            Enemy.IsDodgeing = true;
             Enemy.DodgeRating = Enemy.DodgeRating + 2; //if going to use dodge stat
             Console.WriteLine($"{Enemy.Name} Becomes faster!");
         }
@@ -66,12 +66,12 @@ namespace FireShrine
         }
         public static void RemoveAllEnemyBuffs(Entities Enemy)
         {
-            Enemy.isDodgeing = false;
-            Enemy.isBulwarked = false;
+            Enemy.IsDodgeing = false;
+            Enemy.IsBulwarked = false;
         }
         public static void DeBulwark(Entities Enemy)
         {
-            Enemy.isBulwarked = false;
+            Enemy.IsBulwarked = false;
             Enemy.Defense = Enemy.Defense - 3;
             Console.WriteLine($"{Enemy.Name} has lost bulwark.");
         }
@@ -79,7 +79,7 @@ namespace FireShrine
         {
             Console.WriteLine($"{Enemy.Name} Uses Overwhelm!");
             Story.Continue(0);
-            Random _rand = new Random();//dmgs
+            Random _rand = new Random();
             int modifier = _rand.Next(1, 2);
             var damageDealt = Enemy.BaseDamage + 4 + modifier - Character.armor;
             if (damageDealt < 0)
@@ -88,7 +88,7 @@ namespace FireShrine
             }
             if (damageDealt == 0)
             {
-                Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} Missed!");
+                Story.ColorChanger(ConsoleColor.Green, $"You defended against {Enemy.Name}'s attack");
             }
             else
             {

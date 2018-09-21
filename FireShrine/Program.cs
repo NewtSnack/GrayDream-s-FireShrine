@@ -16,16 +16,18 @@ namespace FireShrine
         public static int initiative = 3;
         public static int mental = 5;
         public static int MaxSanity = 10;
+        public static Unarmed Hands = new Unarmed("Fists");
+        
         //getters
         public static string HpFraction { get { return (currentHealth.ToString() + "/" + vitality.ToString()); } }
         public static string MindFraction { get { return (mental.ToString() + "/" + MaxSanity.ToString()); } }
         public static float hpfractionActual { get { return (currentHealth / (float)vitality); } }
         public static IEquippable EquippedItem { get; set; } //The Item Currently Equipped
+        public static IEquippable Equipped { get; set; }
 
 
-        public static List<string[][]> Inventory = new List<string[][]>();
+
         public static List<IItems> Inventory2 = new List<IItems>();
-        public static string equipped = "Fists";
         public static string[] battleActs = new string[] {"Punch", "Grab", "Counter" };
 
         //survival stats
@@ -158,266 +160,7 @@ namespace FireShrine
             //later put dex, str, ini,
         }
 
-    }
-    public class BattleActions
-    {
-        //BattleAction States/Buffs
-        public static bool isParrying = false;
-        public static bool isQuick = false;
-        public static bool isShattering = false;
-        public static bool isGuarding = false;
-        public static bool isAiming = false;
-        public static int invslot; // value is set when when MoveList is called. MoveList must be called when switching equipped item.
-
-        static Random diceroll = new Random();
-        static int Damvaluelow { get { return Int32.Parse(Character.Inventory[invslot][2][0]); } }
-        static int Damvaluehigh { get { return Int32.Parse(Character.Inventory[invslot][2][1]); ; } }
-        public static int bulletsleft;
-
-
-        public static void MoveList()
-        {
-            if (Character.equipped != "Fists")
-            {
-                var num = Character.Inventory.Count();
-                for (int i = 0; i < Character.Inventory.Count(); i++)
-                {
-                    if (Character.Inventory[i][0][0] == Character.equipped)
-                    {
-                        for (var k = 0; k < (Character.Inventory[i][3]).Count(); k++)
-                        {
-                            int num2 = Character.Inventory[i][3].Count();
-                            var itemAttri = Character.Inventory[i][3][k];
-                            if (itemAttri == "Sharp")
-                            {
-                                Character.battleActs = new string[] { "Stab", "Slash", "Parry" };
-                                invslot = i;
-                                break;
-                            }
-                            if (itemAttri == "Ranged Weapon")
-                            {
-                                Character.battleActs = new string[] { "Shoot", "Draw A Bead", "Double Tap" };
-                                invslot = i;
-                                break;
-
-                            }
-                            if (itemAttri == "Blunt")
-                            {
-                                Character.battleActs = new string[] { "Swing", "Smash", "Block" };
-                                invslot = i;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (Character.Inventory[invslot][3][0] == "Ranged Weapon")
-                {
-                    bulletsleft = Int32.Parse(Character.Inventory[invslot][5][0]);
-                }
-            }
-            else
-            {
-                Character.battleActs = new string[] { "Punch", "Grab", "Block" };
-            }
-
-
-
-            //var invslot = Character.Inventory.IndexOf(Character.equipped); //the equipped item searches the inventory list for the attrib and returns a movelist array that can be added to with .Add()
-        }
-        public static int ActstoActions(string Acts)
-        {
-            switch (Acts)
-            {
-                case "Stab":
-                    return Stab();
-                case "Slash":
-                    return Slash();
-                case "Parry":
-                    return Parry();
-                case "Smash":
-                    return Smash();
-                case "Swing":
-                    return Swing();
-                case "Block":
-                    return Block();
-                case "Punch":
-                    return Punch();
-                case "Grab":
-                    return Grab();
-                case "Counter":
-                    return Parry();//until i think of something cool for countering or want to change whats its based on.
-                case "Shoot":
-                    return Shoot();
-                case "Draw A Bead":
-                    return Draw_A_Bead();
-                case "Double Tap":
-                    return DoubleTap();
-                default:
-                    return 1;//this should never happen but now it will always return something
-            }
-        }
-        //sharp
-        public static int Stab()
-        {
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg + diceroll.Next(0, Character.strength / 2);
-            Console.WriteLine($"You rush foward to plunge the {Character.equipped} into the enemy.");
-            Story.Continue(0);
-            return damageDealt;
-
-            //later add chance to bleed
-            //Get dmg of equipped weapon for all these actions
-        }
-        public static int Slash()
-        {
-            isQuick = true;
-            int weapondmg = diceroll.Next(Damvaluelow - 1, Damvaluehigh + 1);
-            int damageDealt = weapondmg + diceroll.Next(0, Character.strength);
-            Console.WriteLine("You unleash a flurry of quick strikes");
-            Story.Continue(0);
-            return damageDealt;
-        }
-        public static int Parry()
-        {
-            isParrying = true;
-            Console.WriteLine("You stand ready to counter.");
-            Story.Continue(0);
-            return 0;
-            //deal dmg if attacked next turn
-        }
-        //blunt
-        public static int Swing()
-        {
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg + diceroll.Next(Character.strength - 3, Character.strength);
-            Console.WriteLine($"You swing the {Character.equipped} in a wide arc.");
-            Story.Continue(0);
-            return damageDealt;
-        }
-        public static int Smash()
-        {
-            isShattering = true;
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg + diceroll.Next(Character.strength - 2, Character.strength);
-            Console.WriteLine($"You raise the {Character.equipped} high above your head.");
-            int roll = diceroll.Next(100);
-            if (roll < 30) //30% chance to miss
-            {
-                Console.WriteLine($"The enemy dodges and the {Character.equipped} smashes into the ground.");
-                damageDealt = 0;
-            }
-            Story.Continue(0);
-
-            return damageDealt;
-
-        }
-
-        public static int Block()
-        {
-            Console.WriteLine("You bolster your defense");
-            isGuarding = true;
-            Story.Continue(0);
-
-            return 0;
-        }
-        //Gun
-        public static int Draw_A_Bead()
-        {
-            isAiming = true;
-            Console.WriteLine($"You line up the enemy in your sights. Chance to hit increased!");
-            Story.Continue(0);
-            return 0;
-            
-        }
-        public static int Shoot()
-        {
-            if (bulletsleft <= 0) 
-            {
-                Console.WriteLine("You are out of ammo!");
-                Story.Continue(0);
-                return 0;
-            }
-            int weapondmg = diceroll.Next(Damvaluelow, Damvaluehigh);
-            int damageDealt = weapondmg;
-            int roll = diceroll.Next(0, 5) + Character.finesse / 2; //chancetohit
-            Console.WriteLine("You pull the trigger...");
-            if (roll < 2)
-            {
-                damageDealt = 0;
-            }
-            bulletsleft--;
-            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
-            Story.Continue(0);
-            return damageDealt;
-        }
-        public static int DoubleTap()
-        {
-            if (bulletsleft <= 0)
-            {
-                isQuick = true;
-                Console.WriteLine("You are out of ammo!");
-                Story.Continue(0);
-                return 0;
-            }
-            //chance to do dmg twice,
-            double weapondmg1 = Damvaluehigh * .6;
-            double weapondmg2 = Damvaluehigh * .7;
-            Console.WriteLine("Deftly, you let loose two controlled shots!");
-
-            int roll1 = diceroll.Next(0, 10) + (Character.finesse / 3);
-            int roll2 = diceroll.Next(0, 10) + (Character.finesse / 3);
-            if (roll1 < 3 )
-            {
-                Console.WriteLine("The first shot missed!");
-                weapondmg1 = 0;
-                bulletsleft--;
-
-            }
-            if (bulletsleft <= 0)
-            {
-                Console.WriteLine("You are out of ammo!");
-            }
-            else
-            {
-                if (roll2 < 2)
-                {
-                    Console.WriteLine("The second shot missed!");
-                    weapondmg2 = 0;
-                }
-            }
-            
-            int damageDealt = (int)(weapondmg1 + weapondmg2);
-            bulletsleft--;
-            Character.Inventory[invslot][5][0] = bulletsleft.ToString(); //update the inventory
-            Story.Continue(0);
-            return damageDealt;
-        }
-        //Monk
-        public static int Punch()
-        {
-            int damageDealt = diceroll.Next(Character.finesse - 2, Character.finesse);
-            Console.WriteLine("You find an oppertunity to strike!");
-            Story.Continue(0);
-
-            return damageDealt;
-        }
-        public static int Grab()
-        {
-            int damageDealt = diceroll.Next(Character.strength - 2, Character.strength);
-            Console.WriteLine("You manage to strangle and slam the enemy!");
-            Story.Continue(0);
-
-            return damageDealt;
-        }
-        //public static int Counter()
-        //{
-        //    int damageDealt = diceroll.Next(Character.strength - 2, Character.strength);
-        //    return damageDealt;
-        //}
-    }
-
-
-
+    }    
     class Program
     {
         static string playerName;
@@ -433,6 +176,7 @@ namespace FireShrine
         {
             Console.SetWindowSize(120, 25);
             Title();
+
             GetPlayerName();
             StartGame();
             Console.WriteLine("End of Demo.");
@@ -442,6 +186,7 @@ namespace FireShrine
         public static void GetPlayerName()
         {
             Console.WriteLine($"Declare your name: ");
+            Character.Hands.Equip();
             playerName = Console.ReadLine();
             if (playerName == "dev")
             {
@@ -471,21 +216,7 @@ namespace FireShrine
 
             //try threading
         }
-        //custom adding of items to inventory with Name, Description, Damage, Attributes, and Durability
-        public static void BeliAdd(string[] itemname, string[] descript, string[] damrange, string[] attrib, string[] dura, string[] ammo)
-        {
-            if (nextSlot > maxInventory)
-            {
-                Console.WriteLine("Inventory is Full");
-                Console.WriteLine();
-            }
-            else
-            {
-                Character.Inventory.Insert(nextSlot, new string[6][] { itemname, descript, damrange, attrib, dura, ammo });
-                nextSlot++;
-                Story.ColorChanger(ConsoleColor.Blue, $"{itemname[0]} added to inventory");
-            }
-        }
+        //custom adding of items to inventory with Name, Description, Damage, Attributes, and Durability        
         public static void NuAdd(IItems Item)
         {
             if (nextSlot > maxInventory)
@@ -511,49 +242,23 @@ namespace FireShrine
 
         }
 
-        public static void BeliDrop(int item)
-        {
-            //this should be called in the MenuSelection menu
-            //later can implement a system to have the dropped item exist in game world.
-        }
-        public static void BeliUse(int item)
-        {
-            Story.ColorChanger(ConsoleColor.Blue, $"{Character.Inventory[item][0]} used.");
-            Character.Inventory.RemoveAt(item);
-        }
         public static void StatusTimeTicker(int tick)
         {
             //surival
             Character.currentHunger = Character.currentHunger - tick;
             Character.currentThirst = Character.currentThirst - tick * 1.7;
         }
-        public static string ItemGetByAttribute(string Attribute) //Searches inventory by attribute and returns the name string
-        {
-            List<string> returnSearch = new List<string>();
-
-            foreach (string[][] item in Character.Inventory) //Check For a "Weapon Attribute" 
-            {
-                if (Array.IndexOf(item[3], Attribute) >= 0)
-                {
-                    returnSearch.Add(item[0][0]);
-                    string[] ArraySearch = returnSearch.ToArray();
-                    return ArraySearch[0];
-                }
-            }
-            return null;
-        }
         public static void DevActions()
         {
             Console.WriteLine("Here be the testing envoirnment");
             Blade Knife = new Blade("Dull Knife", "A small rusted carving knife.", 3);
-            Blade Knife2 = new Blade("Worn Knife", "A small rusted carving knife.", 3);
-            Knife2.ToInv();
+            Blade dullknife = new Blade("Worn Knife", "A small rusted carving knife.", 6);
+            dullknife.ToInv();
             Knife.ToInv();
-            string[] choicetable = { "A", "B" };
-            Menus.ChoiceSelection(choicetable);
+            Menus.ChoiceSelection(new string[] { "A", "B" });
             Story.Continue(0);
             maxInventory = 4;
-            Character.equipped = "Dull Knife";
+            dullknife.Equip();
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",
@@ -562,7 +267,6 @@ namespace FireShrine
             };
 
             isInBattle = true;
-            BattleActions.MoveList();
             Battle(ManBat);
         }
 
@@ -585,7 +289,7 @@ namespace FireShrine
                 //put in Random battle messages here
                 //Player Turn
                 var i = 0;
-                foreach (var item in Character.battleActs)
+                foreach (var item in Character.Equipped.BattleActs)
                 {
                     i++;
                     Console.WriteLine($"({i}) {item}");
@@ -601,50 +305,49 @@ namespace FireShrine
                 switch (keypress)//add logic to add move acceptable keypresses if there are more than 3 actions for a weapon
                 {
                     case ConsoleKey.D1:
-                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[0]);//return dmgdealt
-                        break;                        
+                        FinalDamage = Character.Equipped.Attack1();
+                        break;
                     case ConsoleKey.D2:
-                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[1]);
+                        FinalDamage = Character.Equipped.Attack2();
                         break;
                     case ConsoleKey.D3:
-                        FinalDamage = BattleActions.ActstoActions(Character.battleActs[2]);
+                        FinalDamage = Character.Equipped.Attack3();
                         break;
                     default:
                         Menus.MenuSelection(keypress);
+                        Console.Clear();
                         continue;                        
 
                 }
-                FinalDamage = (int)(FinalDamage - Enemy.Defense  /3);
+                FinalDamage = (int)(FinalDamage - (Enemy.Defense  / 3));
                 if (FinalDamage < 0)
                 {
                     FinalDamage = 0;
                 }
-                if (BattleActions.isQuick == false & Enemy.isDodgeing == true & BattleActions.isParrying == false & BattleActions.isGuarding == false)
+                if (Acts.IsQuick == false & Enemy.IsDodgeing == true & Acts.IsParrying == false & Acts.IsGuarding == false)
                 {
                     Console.WriteLine("The attack was too slow to land!");
                     FinalDamage = 0;
                 }
-                if (BattleActions.isShattering == true & Enemy.isBulwarked)
+                if (Acts.IsShattering == true & Enemy.IsBulwarked)
                 {
                     Console.WriteLine("You break your enemy's defenses!");
                     AttackList.DeBulwark(Enemy);
+                }                
+                if (FinalDamage == 0 & Acts.IsParrying == false & Acts.IsGuarding == false & Acts.IsAiming == false)
+                {
+                    Console.WriteLine("The {0} resists your attack.",Enemy.Name);                    
                 }
                 if (FinalDamage != 0)
                 {
                     Enemy.HealthPoints = (int)(Enemy.HealthPoints - (FinalDamage));
-                    
+
                     Story.ColorChanger(ConsoleColor.Green, $"{Enemy.Name} takes {FinalDamage} Damage!");
                 }
-                if (FinalDamage == 0 & BattleActions.isParrying == false & BattleActions.isGuarding == false & BattleActions.isAiming == false)
-                {
-                    Console.WriteLine("You missed...");
-                }
-
-
 
                 //remove enemy buffs from last turn
-                Enemy.isDodgeing = false;
-                if (Enemy.isBulwarked == true)
+                Enemy.IsDodgeing = false;
+                if (Enemy.IsBulwarked == true)
                 {
                     AttackList.DeBulwark(Enemy);
 
@@ -662,18 +365,18 @@ namespace FireShrine
 
                 Thread.Sleep(1000);
                 //Enemy Turn
-                if (BattleActions.isGuarding)
+                if (Acts.IsGuarding)
                 {
                     Character.armor = Character.armor + 5;
                     skillstateG = turncounter; 
                 }
-                if (BattleActions.isAiming)
+                if (Acts.IsAiming)
                 {
                     Character.finesse = Character.finesse + 5;
                     skillstateA = turncounter;
                 }
 
-                if (BattleActions.isParrying)
+                if (Acts.IsParrying)
                 {
                     Character.armor = Character.armor + 2;
                     skillstateP = turncounter;
@@ -686,7 +389,7 @@ namespace FireShrine
                 if (turncounter - skillstateA == 2)
                 {
                     Character.finesse = Character.finesse - 5;
-                    BattleActions.isAiming = false;
+                    Acts.IsAiming = false;
                 }
                 if (turncounter - skillstateP == 1)
                 {
@@ -695,24 +398,24 @@ namespace FireShrine
                 var EnemyAttack = Enemy.movelist[diceroll.Next(0, Enemy.movelist.Count())]; //every skill has equal chance, change this logic to make certain attacks more weighted.
 
                 //AttackList
-                if (Enemy.isOverwhelming == true)
+                if (Enemy.IsOverwhelming == true)
                 {
                     AttackList.Overwhelm2(Enemy);
-                    if (BattleActions.isParrying == true)
+                    if (Acts.IsParrying == true)
                     {
                         Console.WriteLine("You manage to return some damage.");
                         int parryDamage = Character.finesse - 2 + diceroll.Next(0,1);
                         Enemy.HealthPoints = Enemy.HealthPoints - parryDamage;
                         Story.ColorChanger(ConsoleColor.Green, $"Parry Returns {parryDamage} Damage to {Enemy.Name}");
                     }
-                    Enemy.isOverwhelming = false;
+                    Enemy.IsOverwhelming = false;
                 }
                 else
                 {
                     if (EnemyAttack == "Bite")
                     {
                         AttackList.Bite(Enemy);
-                        if (BattleActions.isParrying == true)
+                        if (Acts.IsParrying == true)
                         {
                             Console.WriteLine("You manage to return some damage.");
                             int parryDamage = 2;
@@ -732,20 +435,20 @@ namespace FireShrine
                     if (EnemyAttack == "Overwhelm")
                     {
                         AttackList.Overwhelm(Enemy);
-                        Enemy.isOverwhelming = true;
+                        Enemy.IsOverwhelming = true;
                     }
+                    Story.Continue(0);
                 }
                 
 
 
 
                 //remove character attack buffs
-                BattleActions.isQuick = false;
-                BattleActions.isShattering = false;
-                BattleActions.isGuarding = false;
-                BattleActions.isParrying = false;
-
-                if (Character.currentHealth < 0)
+                Acts.IsQuick = false;
+                Acts.IsShattering = false;
+                Acts.IsGuarding = false;
+                Acts.IsParrying = false;
+                if (Character.currentHealth <= 0)
                 {
                     isInBattle = false;
                     Console.WriteLine("You Are Dead.");
