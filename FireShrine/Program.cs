@@ -262,8 +262,7 @@ namespace FireShrine
             Entities ManBat = new Entities
             {
                 Name = "Grotesque Bat",
-                movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" }
-            
+                movelist = new string[] { "Hunt", "Bite", "Overwhelm", "Bulwark" }            
             };
 
             isInBattle = true;
