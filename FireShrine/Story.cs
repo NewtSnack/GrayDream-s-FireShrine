@@ -296,7 +296,7 @@ namespace FireShrine
                 Continue(0);                
                 foreach (IItems item in Character.Inventory2)
                 {
-                    if ((Type)item == typeof(Blade) | item is Blunt)
+                    if (item is Blade | item is Blunt)
                     {
                         Console.WriteLine("Instinctively, you sprint down the stairs toward them clutching your {0} close. You may have use for it.", item.Name);
                     }
@@ -504,13 +504,13 @@ namespace FireShrine
                     " off the top of its head. It drags its feet lazily leaving deep scratches into the wood and has ferocious arms attached to wings that couldn’t possibly lift this creature. The wings are dragged along " +
                     "the floor as it moves sniffing the room and its ragged breath sets a pit in your gut. ");
                 Continue(0);
-                Console.WriteLine("     You feel uneasy observe this creature for any longer, as if doing so would allow it to somehow sense your presence, so you shrink away from the ledge. Your heart begins pound in" +
+                Console.WriteLine("     You feel uneasy observing this creature for any longer, as if doing so would allow it to somehow sense your presence. You shrink away from the ledge. Your heart begins pound in" +
                     " your ears as you frantically look around room for anything that can help you. That’s when you notice a pile of debris at the far end of dining room near two large doors to your left.");
                 Continue(0);
-                Console.WriteLine("You were about to head toward when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
+                Console.WriteLine("You were about to head through them when you remember the chandelier. Observing it, you see it is poorly supported with its pulley system partly destroyed being held in place by a single meager" +
                     " rope tied to another end of the room near a blockade of chairs and tables and an overturned ornate piano. There is just enough cover to remain out of sight at this end of the room, but if the beast comes close it will surely see you." );
                 storysent = true;
-                string[] choices = { "(Intiative) bait and trap the spot under the hanging chandelier", "Hide", "Move toward the rope" };
+                string[] choices = { "(Intiative) bait the spot under the hanging chandelier", "Hide", "Move toward the rope" };
                 Selection = Menus.ChoiceSelection(choices);
             }
             else

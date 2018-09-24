@@ -44,6 +44,7 @@ namespace FireShrine
             }
             keytoint = 0;
             Console.WriteLine();
+            Console.Clear();
             return keyPress.Key;
         }
         public static void MenuSelection(ConsoleKey Selection)
