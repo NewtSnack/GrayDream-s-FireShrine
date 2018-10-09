@@ -105,7 +105,10 @@ namespace FireShrine
             {
                 case ConsoleKey.D1:
                     Console.WriteLine("You Picked up the improvised Club");
-                    Blunt Club = new Blunt("Wooden Club", "A piece of furnishing was part of a chair.", 3);
+                    Blunt Club = new Blunt("Wooden Club", "A piece of furnishing was part of a chair.", 3)
+                    {
+                        Attributes = new string[] { "Blunt", "Heavy", "Brittle" }
+                    };
                     Club.ToInv();
                     break;
                 case ConsoleKey.D2:

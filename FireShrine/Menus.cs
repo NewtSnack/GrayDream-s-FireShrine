@@ -14,6 +14,7 @@ namespace FireShrine
         static int keytoint;
         static bool invAccessed = false;
         static bool leaver = false;
+        static bool escleaver = false;
         static ConsoleKeyInfo keyPress;
         public static ConsoleKey ChoiceSelection(string[] choices)
         {
@@ -64,6 +65,7 @@ namespace FireShrine
                     else
                     {
                         int i = 0;
+
                         foreach (IItems element in Character.Inventory2)
                         {
                             i++;
@@ -77,7 +79,7 @@ namespace FireShrine
                         Console.WriteLine("      Press D To Drop an Item.");
                         Console.WriteLine("      Press Esc To Leave Menus");
 
-                        //must choose number 0 - 6 or (D)rop, Us(E) add more to while for more inv space
+                        //must choose number 0 - 6 or (D)rop, 
                         while (keytoint > Character.Inventory2.Count() | keytoint == 0)
                         {
                             keyPress = Console.ReadKey(true);
@@ -131,6 +133,7 @@ namespace FireShrine
                                 }
                                 if (keyPress.Key == ConsoleKey.Escape) //leave
                                 {
+                                    escleaver = true;
                                     break;
                                 }
                                 keytoint = 0;
@@ -153,8 +156,7 @@ namespace FireShrine
             }
             //Here it should clear and go back to Items list
             keytoint = 0;
-            leaver = false;
-            if (invAccessed == true)
+            if (invAccessed == true & escleaver == false)
             {
                 invAccessed = false;
                 Story.Continue(0);
@@ -166,8 +168,12 @@ namespace FireShrine
                 //ChoiceSelection(Choiceref);
                 if (Program.isInBattle == false)
                 {
+                    if (escleaver == true)
+                    {
+                        Story.Continue(0);
+                        Console.Clear();
+                    }
                     Story.JumpToStory();
-
                 }
             }
         }

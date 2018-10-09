@@ -51,6 +51,7 @@ namespace FireShrine
             Damage = damage;
             WeaponType = "Sharp";
             BattleActs = new string[] {"Stab","Slash","Parry" };
+            Attributes = new string[] { "Sharp" };
         }
         public int Attack1()
         {
@@ -134,6 +135,7 @@ namespace FireShrine
             Damage = damage;
             WeaponType = "Blunt";
             BattleActs = new string[] {"Swing","Smash","Guard" };
+            Attributes = new string[] { "Blunt", "Heavy" };
         }
         public int Attack1()
         {
@@ -216,6 +218,23 @@ namespace FireShrine
         public void Use()
         {
             Console.WriteLine($"{Name} has been consumed.");
+
+            if (HealthRestored != 0)
+            {
+                Character.currentHealth = Character.currentHealth + HealthRestored;
+                Console.WriteLine($"{HealthRestored} Health Gained");
+            }
+            if (HungerValue != 0)
+            {
+                Character.currentHunger = Character.currentHunger + HungerValue;
+                Console.WriteLine($"{HungerValue} Fullness Gained");
+            }
+            if (ThirstValue != 0)
+            {
+                Character.currentThirst = Character.currentThirst + ThirstValue;
+                Console.WriteLine($"{ThirstValue} Hydration Gained");
+            }
+            Character.Inventory2.Remove(this);
         }
 
         public void ToInv()
@@ -243,6 +262,12 @@ namespace FireShrine
             if (ThirstValue != 0)
             {
                 Console.WriteLine("Thirst: " + ThirstValue.ToString());
+            }
+            Console.WriteLine("Press E To Consume this item.");
+            ConsoleKey Keypress = Console.ReadKey(true).Key;
+            if (Keypress == ConsoleKey.E)
+            {
+                Use();
             }
         }
     }

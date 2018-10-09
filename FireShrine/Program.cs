@@ -255,7 +255,6 @@ namespace FireShrine
             Blade dullknife = new Blade("Worn Knife", "A small rusted carving knife.", 6);
             dullknife.ToInv();
             Knife.ToInv();
-            Menus.ChoiceSelection(new string[] { "A", "B" });
             Story.Continue(0);
             maxInventory = 4;
             dullknife.Equip();
